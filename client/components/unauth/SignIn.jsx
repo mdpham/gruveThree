@@ -137,7 +137,7 @@ SignIn = React.createClass({
             <div className="ui huge circular icon button"><i className="big info icon"></i></div>
           </div>
           <div className="center aligned column">
-            
+            <a className="item" href="https://www.soundcloud.com" target="_blank">Soundcloud</a>
           </div>
         </div>
     	</div>

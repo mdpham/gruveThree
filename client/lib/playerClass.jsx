@@ -26,20 +26,24 @@ class SoundManager {
 class Player extends SoundManager {
 	constructor(){
 		super();
-		this.volume = 50;
+		this.volume = 40;
 		player = this;
 	}
 
 	//Start playing new current track
+	updateWave(track){
+		$("#trackWave-waveform").css({
+			"-webkit-mask-box-image": "url("+track.waveform_url+")",
+			"background-size": "cover",
+			"background-color": "black"
+		});
+		$("#trackWave-playing, #trackWave-loading").css("width", 0);
+		$("#trackWave").transition("show");
+	}
 	updateInfo(track){
 		$("#player-trackTitle").text(track.title);
 		$("#player-trackArtist").text(track.user.username);
-		$("#player-trackInfo").css({
-			backgroundImage: "url("+track.waveform_url+")",
-			backgroundSize: "cover",
-			backgroundColor: "pink",
-			filter: "invert(100%)"
-		});
+
 	}
 	start(track){
 		// let player = this;
@@ -54,16 +58,22 @@ class Player extends SoundManager {
 			autoPlay: true,
 			onplay() {
 				$(".player-dimmer").dimmer("hide");
+				player.updateWave(track);
 				player.updateInfo(track);
 			},
 			whileplaying() {
+				//Keep track of volume, volume property updated in Player class will update here
 				if (this.volume !== player.volume) {
 					console.log("diff volume", this.volume, player.volume);
 					this.setVolume(player.volume);
-				}
+				};
+				console.log("played", this.position/this.durationEstimate);
+				//Update waveform
+				$("#trackWave-playing").css("width", 100*this.position/this.durationEstimate + "%");
 			},
 			whileloading() {
-				console.log("readyState", this.readyState);
+				console.log("loaded", this.bytesLoaded/this.bytesTotal);
+				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
 			}
 		};
 		player.sm.destroySound("current");
