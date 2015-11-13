@@ -2,7 +2,13 @@ const {Link} = ReactRouter;
 
 AuthNavBar = React.createClass({
 	//Helpers
-	signOut() {Meteor.logout(Meteor.logoutOtherClients);},
+	signOut() {
+		Meteor.logout(() => {
+			//Stop playing sounds if logging out
+			soundManager.player.sm.destroySound("current");
+			Meteor.logoutOtherClients
+		});
+	},
 	render() {
 		return (
 			<div className="ui inverted top fixed menu">

@@ -85,7 +85,7 @@ class Player extends SoundManager {
 	stop(){
 		player.sm.stop("current");
 		//Reset waveform and pause putton
-		$("#trackWave-playing, #trackWave-loading").css("width", 0);
+		$("#trackWave-playing").css("width", 0);
 
 	}
 	//Pause toggle
