@@ -33,7 +33,7 @@ class Player extends SoundManager {
 		};
 		//History for previous track
 		this.queue = {
-			posn: -1,
+			posn: -1, //index of currently playing track in history;
 			history: []
 		};
 		//Playback
@@ -75,14 +75,20 @@ class Player extends SoundManager {
 
 		return player;
 	}
-	//On track click to play, push track into history and set posn to top of history
-	updateQueue(track) {
-		player.queue.history.push(track);
-		// player.queue.posn = player.queue.history.length;
+	// //On track click to play, push track into history and set posn to top of history
+	// updateQueue(track) {
+	// 	player.queue.history.push(track);
+	// 	// player.queue.posn = player.queue.history.length;
 
-		return player;
-	}
+	// 	return player;
+	// }
 	//STREAM
+	//Clicked on TrackCard
+	select(track){
+		console.log("queue", player.queue);
+		player.queue.history.push(track);
+		player.queue.posn = player.queue.history.length-1;
+	}
 	start(track){
 		//Do nothing if already playing current track
 		if (track == this.track) {console.log("ALREADY PLAYING");return;};
@@ -116,10 +122,14 @@ class Player extends SoundManager {
 			whileloading() {
 				// console.log("loaded", this.bytesLoaded/this.bytesTotal);
 				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+			},
+			onfinish() {
+				console.log("FINISHED PLAYING TRACK");
+				player.next();
 			}
 		};
 		player.sm.destroySound("current");
-		player.sm.createSound(options);	
+		player.sm.createSound(options);
 	}
 	//STOP
 	stop(){
@@ -179,22 +189,43 @@ class Player extends SoundManager {
 		console.log(player.playback.random);
 		return player.playback.random;
 	}
+	repeat(){
+		player.sm.getSoundById("current").stop().play();
+	}
 	next(){
-		console.log("NEXT ", player.streamType);
+		console.log("NEXT ", "stream: ", player.streamType, "queue: ", player.queue, "playback: ", player.playback);
+		if (player.playback.repeat) {
+			player.repeat();
+		}
 		//Check queue for if we're in history
-
-		//Else get upcoming track from server based on streamType
-		Meteor.call("upcomingTrack", player.streamType, "random",
-			(error, result) => {
-				console.log("upcoming", error, result);
-				if (error === undefined) {
-					player.start(result);
-				}
-		});
+		else if (player.queue.posn+1 === player.queue.history.length) {
+		//At top position in history
+			console.log("next: top of history");
+			//Else get upcoming track from server based on streamType
+			Meteor.call("upcomingTrack", player.streamType, "random",
+				(error, result) => {
+					// console.log("upcoming", error, result);
+					// if (error === undefined) {
+					// 	// player.start(result);
+					// 	console.log("RESULT", result);
+					// }
+			});			
+		}
+		else {
+			console.log("next: in history");
+		};
 	}
 	previous(){
-		console.log("previous", player.queue);
-
+		console.log("PREVIOUS", "queue: ", player.queue, "playback: ", player.playback);
+		if (player.playback.repeat) {
+			player.repeat();
+		}
+		else if (player.queue.posn === 0) {
+			console.log("previous: bottom of history");
+		} 
+		else {
+			console.log("previous: in history");
+		};
 	}
 }
 

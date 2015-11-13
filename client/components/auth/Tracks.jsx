@@ -9,11 +9,12 @@ TrackCard = React.createClass({
 		const d = new Date(ms);
 		return d.getUTCMinutes() + ":" + (d.getUTCSeconds() < 10 ? '0'+d.getUTCSeconds() : d.getUTCSeconds());
 	},
-	testPlay(stream) {
+	selectTrack(trackData) {
 		console.log('testPly');
 		//streamtype is object {type: "favorites"|"user", _id: id in mongo db depending on type property}
 		soundManager.player.updateStreamType(this.props.streamType);
-		soundManager.player.start(stream);
+		soundManager.player.select(trackData);
+		soundManager.player.start(trackData);
 	},
 	testVolume(){
 		soundManager.player.changeVolume();
@@ -30,7 +31,7 @@ TrackCard = React.createClass({
 							<div className="ui dimmer">
 								<div className="content">
 									<div className="center">
-										<div className="ui huge orange basic inverted icon button" onClick={this.testPlay.bind(this, scData)}>
+										<div className="ui huge orange basic inverted icon button" onClick={this.selectTrack.bind(this, scData)}>
 											<i className="play icon"></i>
 										</div>
 										<div className="ui huge pink basic inverted icon button" onClick={this.testVolume}>
