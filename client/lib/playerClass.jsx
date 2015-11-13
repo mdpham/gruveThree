@@ -69,12 +69,12 @@ class Player extends SoundManager {
 					console.log("diff volume", this.volume, player.volume);
 					this.setVolume(player.volume);
 				};
-				console.log("played", this.position/this.durationEstimate);
+				// console.log("played", this.position/this.durationEstimate);
 				//Update waveform
 				$("#trackWave-playing").css("width", 100*this.position/this.durationEstimate + "%");
 			},
 			whileloading() {
-				console.log("loaded", this.bytesLoaded/this.bytesTotal);
+				// console.log("loaded", this.bytesLoaded/this.bytesTotal);
 				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
 			}
 		};
@@ -91,7 +91,8 @@ class Player extends SoundManager {
 	//Pause toggle
 	pause(){
 		player.sm.togglePause("current");
-		//Change button to reflect new pause state
+		//return new pause state for Player component
+		return player.sm.getSoundById("current").paused;
 
 	}
 	//Changing volume for player object: up if true, down if false, mute if null
@@ -100,6 +101,7 @@ class Player extends SoundManager {
 	}
 	mute() {
 		player.sm.toggleMute("current");
+		return player.sm.getSoundById("current").muted;
 	}
 }
 

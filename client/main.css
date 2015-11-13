@@ -5,15 +5,15 @@
 #trackWave-background {
 	height: 100%;
 	width: 100%;
-	/*soundcloud orange*/
-	background-color: rgb(251,61,8); 
+	background-color: white;
 	position: absolute;
 	z-index: 0;
 }
 #trackWave-loading {
 	height: 100%;
 	width: 100%;
-	background-color: red;
+	/*soundcloud orange*/
+	background-color: rgba(251,61,8,0.5); 
 	position: absolute;
 	z-index: 1;
 }
@@ -21,7 +21,7 @@
 	height: 100%;
 	width: 50%;
 	/*semanticui orange*/
-	background-color: rgb(239,75,8);
+	background-color: rgba(239,75,8,0.75);
 	position: absolute;
 	z-index: 2;
 }
