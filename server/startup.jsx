@@ -7,7 +7,7 @@
 //s-palepu:86950103
 
 Meteor.startup(() => {
-	console.log(InfluencesCollection.find().fetch());
+	// console.log(InfluencesCollection.find().fetch());
 
 	//Add initial influences for app
 	if (InfluencesCollection.find().count() === 0) {
@@ -47,7 +47,7 @@ Meteor.methods({
 		, {upsert: true});
 	},
 
-	updateFavorites: function(userID, favorites) {
+	updateFavorites: function(userID, favorites, currentTrack) {
 		//soundcloud userID
 		console.log("update favorites", userID, favorites);
 		FavoritesCollection.update({id: userID}, {
@@ -57,21 +57,37 @@ Meteor.methods({
 		}, {upsert:true});
 	},
 
-	upcomingTrack: function(streamType, playbackType) {
-		console.log("upcomingTrack", streamType, playbackType);
+	upcomingTrack: function(streamType, random, currentTrack) {
+		console.log("upcomingTrack", streamType, random);
 		var next = null;
 		switch (streamType.type) {
 			//Soundcloud user
 			case "favorites":
 				let soundcloudUser = FavoritesCollection.findOne({id: streamType.id});
 				let favorites = soundcloudUser.favorites;
-				next = favorites[0];
+				if (random) {
+					next = _.sample(favorites);
+				}
+				else {
+					const currentPosn = favorites.findIndex((element, index, array) => {
+						return element.id == currentTrack.id;
+					});
+					//If at the latest track, loop back to first track (i.e. last in aray)
+					const nextPosn = currentPosn+1;
+					console.log(nextPosn, favorites);
+					if (nextPosn == favorites.length) {
+						next = favorites[0];
+					}
+					else {
+						next = favorites[nextPosn];
+					};
+				}
 				break;
 			//Meteor user
 			case "likes":
 				break;
 		};
-		console.log("return object", next);
+		// console.log("return object", next);
 		return next;
 	}
 });

@@ -194,25 +194,35 @@ class Player extends SoundManager {
 	}
 	next(){
 		console.log("NEXT ", "stream: ", player.streamType, "queue: ", player.queue, "playback: ", player.playback);
+		$(".player-dimmer").dimmer("show");
 		if (player.playback.repeat) {
 			player.repeat();
+			$(".player-dimmer").dimmer("hide");
 		}
 		//Check queue for if we're in history
 		else if (player.queue.posn+1 === player.queue.history.length) {
 		//At top position in history
 			console.log("next: top of history");
 			//Else get upcoming track from server based on streamType
-			Meteor.call("upcomingTrack", player.streamType, "random",
+			Meteor.call("upcomingTrack", player.streamType, player.playback.random, player.track,
 				(error, result) => {
 					// console.log("upcoming", error, result);
-					// if (error === undefined) {
-					// 	// player.start(result);
-					// 	console.log("RESULT", result);
-					// }
+					if (error === undefined) {
+						// player.start(result);
+						console.log("RESULT", result);
+						player.start(result);
+						player.queue.history.push(result);
+						player.queue.posn += 1;
+						$(".player-dimmer").dimmer("hide");
+					}
+					else {console.log("Error getting next track: ", error);};
 			});			
 		}
 		else {
-			console.log("next: in history");
+			console.log("next: in history, next track:");
+			player.queue.posn += 1;
+			player.start(player.queue.history[player.queue.posn]);
+			$(".player-dimmer").dimmer("hide");
 		};
 	}
 	previous(){
@@ -222,9 +232,12 @@ class Player extends SoundManager {
 		}
 		else if (player.queue.posn === 0) {
 			console.log("previous: bottom of history");
+			//Do nothing
 		} 
 		else {
 			console.log("previous: in history");
+			player.queue.posn -= 1;
+			player.start(player.queue.history[player.queue.posn]);
 		};
 	}
 }
