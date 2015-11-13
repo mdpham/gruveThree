@@ -38,6 +38,8 @@ SignInForm = React.createClass({
     this.setState({register: !this.state.register});
   },
   //
+
+  //ON INIT SIGN UP AND IN, NEEDS TO SIGN OUT AND BACK IN TO POPULATE DB
   fetchFromSoundcloud(influences){
     let promises = influences.map((influence) => {return SC.get("/users/"+influence.scUserID)});
     Promise.all(promises)
@@ -52,6 +54,7 @@ SignInForm = React.createClass({
         if (error !== undefined) {console.log("loginWithPassword:", error)}
         else {
           //Load and update database, then log in
+          console.log("fetching from influences", this.data.influences);
           this.fetchFromSoundcloud(this.data.influences);
           // this.history.pushState(null, "/app");
         };
@@ -59,7 +62,7 @@ SignInForm = React.createClass({
   },
   submitSignUp(creds){
     console.log(creds);
-    let profile = {favorites: []};
+    let profile = {likes: []};
     //CHECK STRINGS
     Accounts.createUser(creds,
       (error) => {
