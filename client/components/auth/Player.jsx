@@ -7,9 +7,9 @@ Player = React.createClass({
 	},
 	stop() {
 		soundManager.player.stop();
-		//Be able to play after stopping track
-		const paused = true;
-		this.setState({paused});
+		// //Be able to play after stopping track
+		// const paused = true;
+		// this.setState({paused});
 	},
 	pause() {
 		const paused = soundManager.player.pause();
