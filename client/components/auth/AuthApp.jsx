@@ -9,14 +9,14 @@ AuthApp = React.createClass({
 		};
 	},
 	componentWillMount() {
-		console.log("willMount, data: ", this.data);
+		// console.log("willMount, data: ", this.data);
 		if (!this.data.isAuthenticated) {
 			/*Go to sign in page*/
 			this.history.pushState(null, "/");
 		};
 	},
 	componentDidUpdate(prevProps, prevState) {
-		console.log("didUpdate, data: ", this.data);
+		// console.log("didUpdate, data: ", this.data);
 		if (!this.data.isAuthenticated) {
 			this.history.pushState(null, "/");
 		};

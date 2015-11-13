@@ -3,7 +3,6 @@ UserPage = React.createClass({
 	getMeteorData() {
 		Meteor.subscribe("favorites");
 		Meteor.subscribe("scUsers");
-		console.log(FavoritesCollection.findOne({id: parseInt(this.props.params.userID)}));
 		return {
 			user: SCUsersCollection.findOne({id: parseInt(this.props.params.userID)}),
 			favoriter: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)})
@@ -15,7 +14,7 @@ UserPage = React.createClass({
 		};
 	},
 	componentDidUpdate() {
-		console.log('didMount', this.data);
+		// console.log('didMount', this.data);
 	},
 
 	renderFavorites() {
@@ -27,7 +26,7 @@ UserPage = React.createClass({
 				//Pass soundcloud id to get from FavoritesCollection
 				id: scUser.id
 			};
-			console.log(this.data.favoriter.favorites);
+			// console.log(this.data.favoriter.favorites);
 			return this.data.favoriter.favorites.map((fav) => {
 				return <TrackCard key={fav.id} scData={fav} streamType={streamType}/>
 			});	
@@ -37,7 +36,6 @@ UserPage = React.createClass({
 	},
 
 	render() {
-		console.log("rerenderd");
 		const username = this.data.user ? this.data.user.username : "";
 		return (
 			<div className="ui stackable grid container">

@@ -72,10 +72,11 @@ class Player extends SoundManager {
 	//On track click to play, push track into history and set posn to top of history
 	updateQueue(track) {
 		player.queue.history.push(track);
-		player.queue.posn = player.queue.history.length;
+		// player.queue.posn = player.queue.history.length;
 
 		return player;
 	}
+	//STREAM
 	start(track){
 		//Do nothing if already playing current track
 		if (track == this.track) {console.log("ALREADY PLAYING");return;};
@@ -90,7 +91,7 @@ class Player extends SoundManager {
 			volume: player.volume,
 			autoPlay: true,
 			onplay() {
-				player.updateWave(track).updateInfo(track).updateTrack(track).updateQueue(track);
+				player.updateWave(track).updateInfo(track).updateTrack(track);
 				$(".player-button-pause i").removeClass("play").addClass("pause")
 				$(".player-dimmer").dimmer("hide");
 			},
@@ -112,7 +113,7 @@ class Player extends SoundManager {
 		player.sm.destroySound("current");
 		player.sm.createSound(options);	
 	}
-	//Stop current track
+	//STOP
 	stop(){
 		player.sm.stop("current");
 		//Reset waveform and pause putton
@@ -120,7 +121,7 @@ class Player extends SoundManager {
 		$(".player-button-pause i").removeClass("pause").addClass("play");
 
 	}
-	//Pause toggle
+	//PAUSE
 	pause(){
 		player.sm.togglePause("current");
 		//return new pause state for Player component
@@ -131,23 +132,21 @@ class Player extends SoundManager {
 		}		
 		// return player.sm.getSoundById("current").paused;
 	}
-	//Changing volume for player object: up if true, down if false, mute if null
-	changeVolume(delta) {
-		this.volume = delta ? Math.min(this.volume+5, 100) : Math.max(this.volume-5, 0);
-	}
-	mute() {
-		player.sm.toggleMute("current");
-		return player.sm.getSoundById("current").muted;
-	}
+	
+	//VOLUME
+	//delta = true => up
+	changeVolume(delta) {this.volume = delta ? Math.min(this.volume+5, 100) : Math.max(this.volume-5, 0);}
+	mute() {player.sm.toggleMute("current");return player.sm.getSoundById("current").muted;}
 
+
+	//LIKE
 	like(){
 		let currentTrack = player.track;
 		//Pass this to Meteor call to update
 		//Meteor method returns status
 	}
 
-
-	//Playbaack
+	//PLAYBACK
 	next(){
 		console.log("NEXT ", player.streamType);
 		//Check queue for if we're in history
@@ -162,7 +161,7 @@ class Player extends SoundManager {
 		});
 	}
 	previous(){
-		console.log("PREVIOUS", player.streamType, player.queue);
+		console.log("previous", player.queue);
 
 	}
 }
