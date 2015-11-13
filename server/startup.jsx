@@ -48,11 +48,30 @@ Meteor.methods({
 	},
 
 	updateFavorites: function(userID, favorites) {
+		//soundcloud userID
 		console.log("update favorites", userID, favorites);
 		FavoritesCollection.update({id: userID}, {
 			$set: {
 				favorites: favorites
 			}
 		}, {upsert:true});
+	},
+
+	upcomingTrack: function(streamType, playbackType) {
+		console.log("upcomingTrack", streamType, playbackType);
+		var next = null;
+		switch (streamType.type) {
+			//Soundcloud user
+			case "favorites":
+				let soundcloudUser = FavoritesCollection.findOne({id: streamType.id});
+				let favorites = soundcloudUser.favorites;
+				next = favorites[0];
+				break;
+			//Meteor user
+			case "likes":
+				break;
+		};
+		console.log("return object", next);
+		return next;
 	}
 });

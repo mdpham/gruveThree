@@ -17,9 +17,17 @@
 	position: absolute;
 	z-index: 1;
 }
-#trackWave-playing {
+#trackWave-seeking {
 	height: 100%;
 	width: 50%;
+	/*semanticui orange*/
+	background-color: rgba(239,75,8,0.5);
+	position: absolute;
+	z-index: 2;
+}
+#trackWave-playing {
+	height: 100%;
+	width: 0;
 	/*semanticui orange*/
 	background-color: rgba(239,75,8,0.75);
 	position: absolute;

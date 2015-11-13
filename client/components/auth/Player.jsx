@@ -13,8 +13,8 @@ Player = React.createClass({
 	},
 	pause() {
 		const paused = soundManager.player.pause();
-		console.log(paused);
-		this.setState({paused});
+		// console.log(paused);
+		// this.setState({paused});
 	},
 	changeVolume(delta) {
 		soundManager.player.changeVolume(delta);
@@ -23,6 +23,12 @@ Player = React.createClass({
 		const muted = soundManager.player.mute();
 		console.log(muted);
 		this.setState({muted});
+	},
+	next() {
+		soundManager.player.next();
+	},
+	previous() {
+		soundManager.player.previous();
 	},
 	componentDidMount() {
 		$(ReactDOM.findDOMNode(this)).transition("hide");
@@ -56,11 +62,21 @@ Player = React.createClass({
 									<i className={"orange"+pauseIcon+playerIcon}></i>
 								</div>
 						</div>
-						<div className="eleven wide column">
+
+						<div className="nine wide column">
 							<h6 className="ui tiny inverted header">
 								<div className="sub header"><span id="player-trackArtist">artist</span></div>
 								<span id="player-trackTitle">track</span>
 							</h6>
+						</div>
+
+						<div className="two wide column">
+							<div className={"player-button-next"+playerButton} onClick={this.next}>
+								<i className={"forward"+playerIcon}></i>
+							</div>
+							<div className={"player-button-previous"+playerButton} onClick={this.previous}>
+								<i className={"backward"+playerIcon}></i>
+							</div>
 						</div>
 						<div className="one wide column">
 							<div className="player-button-like  ui circular basic inverted pink icon button">

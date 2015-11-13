@@ -11,11 +11,8 @@ TrackCard = React.createClass({
 	},
 	testPlay(stream) {
 		console.log('testPly');
-		// soundManager.createSound({
-		// 	url: stream+"?client_id=7b734feadab101a0d2aeea04f6cd02cc",
-		// 	autoPlay: true,
-		// 	volume: 50
-		// });
+		//streamtype is object {type: "favorites"|"user", _id: id in mongo db depending on type property}
+		soundManager.player.updateStreamType(this.props.streamType);
 		soundManager.player.start(stream);
 	},
 	testVolume(){
