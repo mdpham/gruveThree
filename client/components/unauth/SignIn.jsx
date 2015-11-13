@@ -62,12 +62,15 @@ SignInForm = React.createClass({
   },
   submitSignUp(creds){
     console.log(creds);
-    let profile = {likes: []};
+    // let profile = {likes: []};
     //CHECK STRINGS
     Accounts.createUser(creds,
       (error) => {
         if (error !== undefined) {console.log("createUser:", error)}
         else {
+          console.log("account created, log in", creds);
+          let username = creds.username;
+          let password = creds.password;
           Meteor.loginWithPassword({username}, password, (error) => {
             if (error !== undefined) {console.log("loginWithPassword", error);}
             else {this.history.pushState(null, "/app");};
@@ -81,7 +84,8 @@ SignInForm = React.createClass({
     let password = ReactDOM.findDOMNode(this.refs.password).value.trim();
     if (this.state.register) {
       let passwordConfirm = ReactDOM.findDOMNode(this.refs.passwordConfirm).value.trim();
-      this.submitSignUp({username, password, passwordConfirm, })
+      let profile = {likes: []};
+      this.submitSignUp({username, password, passwordConfirm, profile});
     }
     else {
       this.submitSignIn({username, password});

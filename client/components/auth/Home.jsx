@@ -14,6 +14,15 @@ Home = React.createClass({
 	componentDidUpdate() {
 		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
 	},
+
+	renderTracks() {
+		if (!this.data.currentUser) {
+			return (<div>Go get some likes</div>);
+		}
+		else {
+			return (this.data.currentUser.profile.likes.length);
+		};
+	},
 	render() {
 		if (!this.data.currentUser) {return <NotFound />}
 		return (
@@ -21,7 +30,7 @@ Home = React.createClass({
 				<div className="ui horizontal divider">{this.data.currentUser.username}</div>
 				<div className="one column row">
 				<div id="profileTracks" className="ui column centered stackable grid">
-					
+					{this.renderTracks()}
 				</div>
 				</div>
 			</div>

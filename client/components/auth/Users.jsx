@@ -94,7 +94,7 @@ Users = React.createClass({
 		if (!this.data.currentUser) {return <NotFound />};
 		return (
 			<div className="ui stackable grid container">
-				<div className="ui horizontal divider">INFLUENCES</div>
+				<div className="ui horizontal divider">People</div>
 				<div className="one column row">
 					<div id="userCards" className="ui column centered stackable grid">
 						{this.renderUsers()}
