@@ -33,17 +33,20 @@ class Player extends SoundManager {
 	//Start playing new current track
 	updateWave(track){
 		$("#trackWave-waveform").css({
-			"-webkit-mask-box-image": "url("+track.waveform_url+")",
-			"background-size": "cover",
-			"background-color": "black"
+			"-webkit-mask-box-image": "url("+track.waveform_url+")"
 		});
 		$("#trackWave-playing, #trackWave-loading").css("width", 0);
 		$("#trackWave").transition("show");
+
+		//for chaining
+		return player;
 	}
 	updateInfo(track){
 		$("#player-trackTitle").text(track.title);
 		$("#player-trackArtist").text(track.user.username);
 
+		$("#player").transition("show");
+		return player;
 	}
 	start(track){
 		// let player = this;
@@ -57,9 +60,8 @@ class Player extends SoundManager {
 			volume: player.volume,
 			autoPlay: true,
 			onplay() {
+				player.updateWave(track).updateInfo(track);
 				$(".player-dimmer").dimmer("hide");
-				player.updateWave(track);
-				player.updateInfo(track);
 			},
 			whileplaying() {
 				//Keep track of volume, volume property updated in Player class will update here
@@ -80,19 +82,24 @@ class Player extends SoundManager {
 		player.sm.createSound(options);	
 	}
 	//Stop current track
-	stop(){}
+	stop(){
+		player.sm.stop("current");
+		//Reset waveform and pause putton
+		$("#trackWave-playing, #trackWave-loading").css("width", 0);
+
+	}
 	//Pause toggle
-	pause(bool){}
-	//Seeking for a track (i.e. tracking)
-	seek(forward){}
+	pause(){
+		player.sm.togglePause("current");
+		//Change button to reflect new pause state
+
+	}
 	//Changing volume for player object: up if true, down if false, mute if null
-	changeVolume(delta = null) {
-		if (delta === null) {
-			player.sm.toggleMute();
-		} else {
-			this.volume = delta ? Math.min(this.volume+5, 100) : Math.max(this.volume-5, 0);
-		};
-		console.log("changeVolume", delta, this.volume);
+	changeVolume(delta) {
+		this.volume = delta ? Math.min(this.volume+5, 100) : Math.max(this.volume-5, 0);
+	}
+	mute() {
+		player.sm.toggleMute("current");
 	}
 }
 
