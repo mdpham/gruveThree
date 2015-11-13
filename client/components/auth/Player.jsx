@@ -38,12 +38,7 @@ Player = React.createClass({
 				<div className="ui fluid stackable grid container">
 					<div className="middle aligned row">
 						<div className="center aligned four wide column">
-								<div className={"player-button-stop"+playerButton} onClick={this.stop}>
-									<i className={"red stop "+playerIcon}></i>
-								</div>
-								<div className={"player-button-pause"+playerButton} onClick={this.pause}>
-									<i className={"orange"+pauseIcon+playerIcon}></i>
-								</div>
+							{/*Volume*/}
 								<div className={"player-button-volumedown"+playerButton} onClick={this.changeVolume.bind(this, false)}>
 									<i className={"green volume down"+playerIcon}></i>
 								</div>
@@ -52,6 +47,13 @@ Player = React.createClass({
 								</div>
 								<div className={"player-button-volumemute red"+playerButton} onClick={this.mute}>
 									<i className={"volume off"+muteIcon+playerIcon}></i>
+								</div>
+							{/*Playback*/}
+								<div className={"player-button-stop"+playerButton} onClick={this.stop}>
+									<i className={"red stop "+playerIcon}></i>
+								</div>
+								<div className={"player-button-pause"+playerButton} onClick={this.pause}>
+									<i className={"orange"+pauseIcon+playerIcon}></i>
 								</div>
 						</div>
 						<div className="eleven wide column">

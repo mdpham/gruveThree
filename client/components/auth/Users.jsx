@@ -31,6 +31,17 @@ UserCard = React.createClass({
 	render() {
 		let scData = this.props.sc;
 		const prof_avatar = scData.avatar_url.includes("default_avatar") ? scData.avatar_url : scData.avatar_url.replace("large", "t500x500");
+		//
+		let description = "";
+		switch (scData.id) {
+			case 49699208: description = "me"; break;
+			case 69813820: description = "meh"; break;
+			case 78954835: description = "2/3"; break;
+			case 158395759: description = "bf"; break;
+			case 79933909: description = "3/3"; break;
+			case 135282929: description = "one punch man"; break;
+			case 86950103: description = "red bull"; break;
+		};
 		return(
 			
 			<div className="five wide column">
@@ -48,7 +59,7 @@ UserCard = React.createClass({
 							</div>
 					</div>
 					<div className="ui select-dimmer dimmer">
-						<div className="ui text loader">Fetching from {scData.username}</div>
+						<div className="ui text loader">{description}</div>
 					</div>
 				</div>
 			
