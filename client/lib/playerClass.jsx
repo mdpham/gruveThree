@@ -27,6 +27,7 @@ class Player extends SoundManager {
 	constructor(){
 		super();
 		this.volume = 40;
+		this.track = null;
 		player = this;
 	}
 
@@ -48,6 +49,10 @@ class Player extends SoundManager {
 		$("#player").transition("show");
 		return player;
 	}
+	//For liking
+	updateTrack(track) {
+		player.track = track;
+	}
 	start(track){
 		// let player = this;
 		// console.log("Player.play", stream, this,super);
@@ -60,7 +65,7 @@ class Player extends SoundManager {
 			volume: player.volume,
 			autoPlay: true,
 			onplay() {
-				player.updateWave(track).updateInfo(track);
+				player.updateWave(track).updateInfo(track).updateTrack(track);
 				$(".player-dimmer").dimmer("hide");
 			},
 			whileplaying() {
@@ -102,6 +107,12 @@ class Player extends SoundManager {
 	mute() {
 		player.sm.toggleMute("current");
 		return player.sm.getSoundById("current").muted;
+	}
+
+	like(){
+		let currentTrack = player.track;
+		//Pass this to Meteor call to update
+		//Meteor method returns status
 	}
 }
 

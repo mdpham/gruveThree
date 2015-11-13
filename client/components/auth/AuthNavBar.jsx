@@ -6,7 +6,7 @@ AuthNavBar = React.createClass({
 		Meteor.logout(() => {
 			//Stop playing sounds if logging out
 			soundManager.player.sm.destroySound("current");
-			Meteor.logoutOtherClients
+			Meteor.logoutOtherClients();
 		});
 	},
 	render() {
