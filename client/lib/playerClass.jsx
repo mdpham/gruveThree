@@ -22,7 +22,7 @@ class SoundManager {
 class Player extends SoundManager {
 	constructor(){
 		super();
-		this.volume = 0;
+		this.volume = 40;
 		this.track = null;
 		//Type of list we're playing from: user's likes or a soundcloud favorites
 		this.streamType = {
@@ -98,6 +98,7 @@ class Player extends SoundManager {
 			autoPlay: true,
 			onplay() {
 				player.updateWave(track).updateInfo(track).updateTrack(track);
+				$(".player-button-volumemute i").removeClass("red");
 				$(".player-button-pause i").removeClass("play").addClass("pause")
 				$(".player-dimmer").dimmer("hide");
 			},
@@ -110,6 +111,7 @@ class Player extends SoundManager {
 				// console.log("played", this.position/this.durationEstimate);
 				//Update waveform
 				$("#trackWave-playing").css("width", 100*this.position/this.durationEstimate + "%");
+				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
 			},
 			whileloading() {
 				// console.log("loaded", this.bytesLoaded/this.bytesTotal);
@@ -135,14 +137,28 @@ class Player extends SoundManager {
 			$(".player-button-pause i").removeClass("pause").addClass("play");	
 		} else {
 			$(".player-button-pause i").removeClass("play").addClass("pause");	
-		}		
+		};
+		//Include for playing after mute,stop,play
+		if (player.sm.getSoundById("current").muted) {
+			$(".player-button-volumemute i").addClass("red");
+		} else {
+			$(".player-button-volumemute i").removeClass("red");
+		};
 		// return player.sm.getSoundById("current").paused;
 	}
 	
 	//VOLUME
 	//delta = true => up
 	changeVolume(delta) {this.volume = delta ? Math.min(this.volume+5, 100) : Math.max(this.volume-5, 0);}
-	mute() {player.sm.toggleMute("current");return player.sm.getSoundById("current").muted;}
+	mute(){
+		player.sm.toggleMute("current");
+		if (player.sm.getSoundById("current").muted) {
+			$(".player-button-volumemute i").addClass("red");
+		} else {
+			$(".player-button-volumemute i").removeClass("red");
+		};
+		// return player.sm.getSoundById("current").muted;
+	}
 
 
 	//LIKE

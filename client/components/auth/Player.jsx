@@ -23,8 +23,8 @@ Player = React.createClass({
 	},
 	mute() {
 		const muted = soundManager.player.mute();
-		console.log(muted);
-		this.setState({muted});
+		// console.log(muted);
+		// this.setState({muted});
 	},
 	next() {
 		soundManager.player.next();
@@ -59,7 +59,6 @@ Player = React.createClass({
 		const playerIcon = " small inverted circular icon";
 		//For play state
 		const pauseIcon = this.state.paused ? " play " : " pause ";
-		const muteIcon = this.state.muted ? " red " : "";
 		//Playback
 		const repeatIcon = this.state.repeat ? " loading " : "";
 		return (
@@ -75,7 +74,7 @@ Player = React.createClass({
 									<i className={"green volume up"+playerIcon}></i>
 								</div>
 								<div className={"player-button-volumemute red basic"+playerButton} onClick={this.mute}>
-									<i className={"volume off"+muteIcon+playerIcon}></i>
+									<i className={"volume off"+playerIcon}></i>
 								</div>
 							{/*PAUSE/STOP*/}
 								<div className={"player-button-pause"+playerButton} onClick={this.pause}>
@@ -93,42 +92,47 @@ Player = React.createClass({
 							</h6>
 						</div>
 
-						<div className="center aligned two wide column">
-							<div className={"player-button-previous tiny"+playerButton} onClick={this.previous}>
-								<i className={"backward"+playerIcon}></i>
-							</div>
-							<div className={"player-button-next tiny"+playerButton} onClick={this.next}>
-								<i className={"forward"+playerIcon}></i>
-							</div>
-						</div>
+
 
 					{/*PLAYBACK OPTIONS*/}
-						<div className="one wide column">
-							<div id="player-show-playback" className="ui basic inverted icon button">
-								<i className="chevron up icon"></i>
-							</div>
-							<div id="player-playback-popup" className="ui popup one column center aligned grid">
-								<div className="ui fitted horizontal divider"><i className="random icon"></i></div>
-								<div className="column">
-									<div className="ui toggle fitted checkbox">
-									  <input type="checkbox" onChange={this.toggleRandom}/>
-									  <label></label>
+						<div className="ui four wide center aligned column grid">
+							<div className="row">
+								<div className="center aligned four wide column">
+									<div id="player-show-playback" className="ui tiny circular basic inverted icon button">
+										<i className={"chevron up"+playerIcon}></i>
+									</div>
+									<div id="player-playback-popup" className="ui popup one column center aligned grid">
+										<div className="ui fitted horizontal divider"><i className="random icon"></i></div>
+										<div className="column">
+											<div className="ui toggle fitted checkbox">
+											  <input type="checkbox" onChange={this.toggleRandom}/>
+											  <label></label>
+											</div>
+										</div>
+										<div className="ui fitted horizontal divider">
+											<i className={"repeat icon"+repeatIcon}></i>
+										</div>
+										<div className="column">
+											<div className="ui toggle fitted checkbox">
+											  <input type="checkbox" onChange={this.toggleRepeat}/>
+											  <label></label>
+											</div>
+										</div>
 									</div>
 								</div>
-								<div className="ui fitted horizontal divider">
-									<i className={"repeat icon"+repeatIcon}></i>
-								</div>
-								<div className="column">
-									<div className="ui toggle fitted checkbox">
-									  <input type="checkbox" onChange={this.toggleRepeat}/>
-									  <label></label>
+								<div className="center aligned eight wide column">
+									<div className={"player-button-previous tiny"+playerButton} onClick={this.previous}>
+										<i className={"step backward"+playerIcon}></i>
+									</div>
+									<div className={"player-button-next tiny"+playerButton} onClick={this.next}>
+										<i className={"step forward"+playerIcon}></i>
 									</div>
 								</div>
-							</div>
-						</div>
-						<div className="center aligned one wide column">
-							<div className="player-button-like  ui circular basic inverted pink icon button">
-								<i className={"pink heart"+playerIcon}></i>
+								<div className="center aligned four wide column">
+									<div className="player-button-like ui tiny circular basic inverted pink icon button">
+										<i className={"pink heart"+playerIcon}></i>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
