@@ -45,3 +45,12 @@
 div[class^='player-button'] {
 	cursor: pointer;
 }
+
+#player-trackArtist, #player-trackTitle {
+	color: white;
+	opacity: 0.8;
+}
+#player-trackArtist:hover, #player-trackTitle:hover {
+	/*color: #4183c4;*/
+	opacity: 1;
+}

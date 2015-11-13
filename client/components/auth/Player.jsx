@@ -69,7 +69,7 @@ Player = React.createClass({
 		//Playback
 		const repeatIcon = this.state.repeat ? " loading " : "";
 		return (
-			<div id="player" className="ui huge bottom fixed inverted menu">
+			<div id="player" className="ui big bottom fixed inverted menu">
 				<div className="ui fluid stackable grid container">
 					<div className="middle aligned row">
 						<div className="center aligned two wide column">
@@ -82,17 +82,28 @@ Player = React.createClass({
 								</div>
 						</div>
 
-						<div className="left aligned nine wide column">
-							<h6 className="ui tiny inverted header">
-								<div className="sub header"><span id="player-trackArtist">artist</span></div>
-								<span id="player-trackTitle">track</span>
-							</h6>
+						<div className="ui middle aligned ten wide column grid">
+							<div className="row">
+								<div className="right aligned two wide column">
+							    <div className="ui mini image">
+							      <img id="player-trackArtwork" src=""/>
+							    </div>
+								</div>
+						    <div className="left middle aligned fourteen wide column">
+						    		<div className="ui inverted header">
+											<div className="sub header">
+												<a id="player-trackArtist" className="white" href="" target="_blank">artist</a>
+											</div>
+						    			<a id="player-trackTitle" href="" className="white" target="_blank">track</a>
+						    		</div>
+						    </div>
+						   </div>
 						</div>
 
 
 
 					{/*PLAYBACK OPTIONS*/}
-						<div className="ui five wide center aligned column grid">
+						<div className="ui four wide center aligned column grid">
 							<div className="row">
 								<div className="center aligned three wide column">
 								{/*Volume*/}
@@ -134,7 +145,7 @@ Player = React.createClass({
 										</div>
 									</div>
 								</div>
-								<div className="center aligned seven wide column">
+								<div className="center aligned eight wide column">
 									<div className={"player-button-previous tiny"+playerButton} onClick={this.previous}>
 										<i className={"step backward"+playerIcon}></i>
 									</div>
@@ -142,7 +153,7 @@ Player = React.createClass({
 										<i className={"step forward"+playerIcon}></i>
 									</div>
 								</div>
-								<div className="center aligned three wide column">
+								<div className="center aligned two wide column">
 									<div className="player-button-like ui tiny circular basic inverted pink icon button">
 										<i className={"pink heart"+playerIcon}></i>
 									</div>

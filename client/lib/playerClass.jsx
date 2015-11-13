@@ -62,8 +62,9 @@ class Player extends SoundManager {
 		return player;
 	}
 	updateInfo(track){
-		$("#player-trackTitle").text(track.title);
-		$("#player-trackArtist").text(track.user.username);
+		$("#player-trackTitle").text(track.title).attr("href", track.permalink_url);
+		$("#player-trackArtist").text(track.user.username).attr("href", track.user.permalink_url);
+		$("#player-trackArtwork").attr("src", track.artwork_url);
 
 		$("#player").transition("show");
 		return player;
@@ -75,13 +76,6 @@ class Player extends SoundManager {
 
 		return player;
 	}
-	// //On track click to play, push track into history and set posn to top of history
-	// updateQueue(track) {
-	// 	player.queue.history.push(track);
-	// 	// player.queue.posn = player.queue.history.length;
-
-	// 	return player;
-	// }
 	//STREAM
 	//Clicked on TrackCard
 	select(track){
