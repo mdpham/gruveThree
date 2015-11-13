@@ -31,6 +31,7 @@ UserCard = React.createClass({
 	render() {
 		let scData = this.props.sc;
 		const prof_avatar = scData.avatar_url.includes("default_avatar") ? scData.avatar_url : scData.avatar_url.replace("large", "t500x500");
+		const username = scData.username;
 		//
 		let description = "";
 		switch (scData.id) {
@@ -51,7 +52,7 @@ UserCard = React.createClass({
 								<div className="ui hover-dimmer dimmer">
 									<div className="content">
 										<div className="center">
-											<div className="ui basic orange inverted button" onClick={this.goToUserPage.bind(this, scData.id)}>{scData.username}</div>
+											<div className="ui basic orange inverted button" onClick={this.goToUserPage.bind(this, scData.id)}>{username}</div>
 										</div>
 									</div>
 								</div>

@@ -22,7 +22,7 @@ class SoundManager {
 class Player extends SoundManager {
 	constructor(){
 		super();
-		this.volume = 40;
+		this.volume = 0;
 		this.track = null;
 		//Type of list we're playing from: user's likes or a soundcloud favorites
 		this.streamType = {
@@ -35,6 +35,12 @@ class Player extends SoundManager {
 		this.queue = {
 			posn: -1,
 			history: []
+		};
+		//Playback
+		this.playback = {
+			//Should match Player.jsx on start
+			repeat: false,
+			random: false
 		}
 
 		player = this;
@@ -147,6 +153,14 @@ class Player extends SoundManager {
 	}
 
 	//PLAYBACK
+	toggleRepeat() {
+		player.playback.repeat = !player.playback.repeat;
+		return player.playback.repeat;
+	}
+	toggleRandom() {
+		player.playback.random = !player.playback.random;
+		return player.playback.random;
+	}
 	next(){
 		console.log("NEXT ", player.streamType);
 		//Check queue for if we're in history

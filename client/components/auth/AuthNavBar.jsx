@@ -25,7 +25,6 @@ AuthNavBar = React.createClass({
 								<a className="item" onClick={this.signOut}><i className="sign out icon"></i>Sign Out</a>
 							</div>
 						</div>
-
 						<div className="ui fluid container">
 							<Waveform />
 						</div>
