@@ -171,10 +171,12 @@ class Player extends SoundManager {
 	//PLAYBACK
 	toggleRepeat() {
 		player.playback.repeat = !player.playback.repeat;
+		console.log(player.playback.repeat);
 		return player.playback.repeat;
 	}
 	toggleRandom() {
 		player.playback.random = !player.playback.random;
+		console.log(player.playback.random);
 		return player.playback.random;
 	}
 	next(){
