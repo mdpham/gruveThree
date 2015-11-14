@@ -89,6 +89,23 @@ Meteor.methods({
 				break;
 			//Meteor user
 			case "likes":
+				let userId = Meteor.userId();
+				let likes = LikesCollection.find({likedBy: userId}).fetch();
+				if (random) {
+					next = _.sample(likes);
+				}
+				else {
+					const currentPosn = likes.findIndex((e,i,a) => {
+						return e.track.id == currentTrack.id;
+					});
+					const nextPosn = currentPosn+1;
+					if (nextPosn == likes.length) {
+						next = likes[0].track;
+					}
+					else {
+						next = likes[nextPosn].track;
+					};
+				};
 				break;
 		};
 		// console.log("return object", next);
