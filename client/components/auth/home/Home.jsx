@@ -59,6 +59,7 @@ Home = React.createClass({
 	mixins: [ReactMeteorData, History],
 	getMeteorData() {
 		Meteor.subscribe("likes");
+		Meteor.subscribe("users");
 		return {
 			isAuthenticated: Meteor.userId() !== null,
 			currentUser: Meteor.user(),

@@ -1,5 +1,20 @@
 Bubble = React.createClass({
+	mixins: [ReactMeteorData],
+	getMeteorData() {
+		Meteor.subscribe("users");
+		return {
+			profileLikes: Meteor.user().profile.likes
+		};
+	},
+
+	mostLikedTrack() {
+		// this.data.profileLikes.reduce((previous,current,index,arr) => {
+		// 	const next = current.currentlyLiked && previous.numberOfLikes =< current.numberOfLikes ? current : previous;
+		// 	return next;
+		// }, {currentlyLiked: true, numberOfLikes: 1});
+	},
 	render() {
+		// console.log("bubbling likes: ", mostLikedTrack());
 		return (
 			<div className="ui fluid raised segment">
 				<div className="ui items">
