@@ -114,13 +114,34 @@ Meteor.methods({
 
 	//Liker
 	likeTrack: function(track) {
-		console.log(Meteor.user().profile.likes, LikesCollection.find({}).fetch());
+		// console.log(Meteor.user().profile.likes, LikesCollection.find({}).fetch());
 		//Update track in user profile
-		// Meteor.users.update({_id: Meteor.user()._id}, {
-		// 	$push: {
-		// 		"profile.likes": track.id
-		// 	}
-		// }, {upsert:true});
+		let prevLike = Meteor.user().profile.likes.find((profLike, index, arr) => {
+			return profLike.track.id == track.id;
+		});
+		const count = prevLike === undefined ? 1 : prevLike.numberOfLikes+1;
+		const likeInProfile = {
+			track: track,
+			numberOfLikes: count,
+			currentlyLiked: true
+		};
+		if (prevLike === undefined) {
+			// var test = Meteor.users.find({_id: Meteor.user()._id, "profile.likes.id": track.id});
+			console.log("NOT IN PROFILE LIKES")
+			Meteor.users.update({_id: Meteor.user()._id},
+				{
+					$push: {"profile.likes": likeInProfile}
+				}
+			);
+		}
+		else {
+			Meteor.users.update({_id: Meteor.user()._id, "profile.likes.track.id": track.id},
+				{
+					$set: {"profile.likes.$.numberOfLikes": count, "profile.likes.$.currentlyLiked": true}
+				});
+			console.log("IN PROFILE LIKES");
+		}
+
 		//Update in Likes collection
 		const like = {
 			likedBy: Meteor.userId(),
@@ -128,9 +149,15 @@ Meteor.methods({
 			track: track
 		};
 		LikesCollection.update({likedBy: Meteor.userId(), "track.id": track.id}, like, {upsert: true});
-		return LikesCollection.find({likedBy: Meteor.userId()}).fetch();
+		return Meteor.user().profile.likes;
 	},
 	unlikeTrack: function(track) {
+		//Update in user's profile (for stats)
+		Meteor.users.update({_id: Meteor.user()._id, "profile.likes.track.id": track.id},
+			{$set: {"profile.likes.$.currentlyLiked": false}}
+		);
+		//Update in likes collection (goes to user's homepage)
 		LikesCollection.remove({likedBy: Meteor.userId(), "track.id": track.id});
+
 	}
 });
