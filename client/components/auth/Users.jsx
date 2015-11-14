@@ -31,6 +31,19 @@ UserCard = React.createClass({
 	render() {
 		let scData = this.props.sc;
 		const prof_avatar = scData.avatar_url.includes("default_avatar") ? scData.avatar_url : scData.avatar_url.replace("large", "t500x500");
+		const username = scData.username;
+		//
+		let description = "";
+		switch (scData.id) {
+			case 49699208: description = "me"; break;
+			case 69813820: description = "meh"; break;
+			case 78954835: description = "one of three"; break;
+			case 158395759: description = "the bestfriend"; break;
+			case 79933909: description = "one of three"; break;
+			case 135282929: description = "juuuuan"; break;
+			case 86950103: description = "red bull"; break;
+			default: description = "Fetching likes"; break;
+		};
 		return(
 			
 			<div className="five wide column">
@@ -40,7 +53,7 @@ UserCard = React.createClass({
 								<div className="ui hover-dimmer dimmer">
 									<div className="content">
 										<div className="center">
-											<div className="ui basic orange inverted button" onClick={this.goToUserPage.bind(this, scData.id)}>{scData.username}</div>
+											<div className="ui basic orange inverted button" onClick={this.goToUserPage.bind(this, scData.id)}>{username}</div>
 										</div>
 									</div>
 								</div>
@@ -48,7 +61,7 @@ UserCard = React.createClass({
 							</div>
 					</div>
 					<div className="ui select-dimmer dimmer">
-						<div className="ui text loader">Fetching from {scData.username}</div>
+						<div className="ui text loader">{description}</div>
 					</div>
 				</div>
 			
@@ -82,7 +95,7 @@ Users = React.createClass({
 		if (!this.data.currentUser) {return <NotFound />};
 		return (
 			<div className="ui stackable grid container">
-				<div className="ui horizontal divider">INFLUENCES</div>
+				<div className="ui horizontal divider">People</div>
 				<div className="one column row">
 					<div id="userCards" className="ui column centered stackable grid">
 						{this.renderUsers()}

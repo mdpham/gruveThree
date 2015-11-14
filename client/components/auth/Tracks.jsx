@@ -9,23 +9,44 @@ TrackCard = React.createClass({
 		const d = new Date(ms);
 		return d.getUTCMinutes() + ":" + (d.getUTCSeconds() < 10 ? '0'+d.getUTCSeconds() : d.getUTCSeconds());
 	},
-	testPlay(stream) {
+	selectTrack(trackData) {
 		console.log('testPly');
-		// soundManager.createSound({
-		// 	url: stream+"?client_id=7b734feadab101a0d2aeea04f6cd02cc",
-		// 	autoPlay: true,
-		// 	volume: 50
-		// });
-		soundManager.player.start(stream);
+		//streamtype is object {type: "favorites"|"user", _id: id in mongo db depending on type property}
+		soundManager.player.updateStreamType(this.props.streamType);
+		soundManager.player.select(trackData);
+		soundManager.player.start(trackData);
 	},
-	testVolume(){
-		soundManager.player.changeVolume();
+	likeTrack() {
+		soundManager.liker.like(this.props.scData);
+	},
+	unlikeTrack() {
+		soundManager.liker.unlike(this.props.scData);
 	},
 	render() {
 		// console.log(this.props.sc);
+		//scData is track info
 		const scData = this.props.scData;
 		const artwork_url = scData.artwork_url !== null ? scData.artwork_url.replace("large", "t500x500") : "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
 		const duration = this.getDuration(scData.duration);
+		var likeButton = null;
+		switch (this.props.streamType.type) {
+			case "favorites":
+			//For liking a track and having it bubble up your likes
+				likeButton = (
+					<div className="ui huge pink basic inverted icon button" onClick={this.likeTrack}>
+						<i className="heart icon"></i>
+					</div>
+				);
+				break;
+			case "likes":
+			//For unliking a track
+				likeButton = (
+					<div className="ui huge basic inverted icon button" onClick={this.unlikeTrack}>
+						<i className="remove icon"></i>
+					</div>
+				);
+				break;
+		};
 		return(
 			<div className="four wide column">
 				<div className="track ui fluid card">
@@ -33,12 +54,10 @@ TrackCard = React.createClass({
 							<div className="ui dimmer">
 								<div className="content">
 									<div className="center">
-										<div className="ui huge orange basic inverted icon button" onClick={this.testPlay.bind(this, scData)}>
+										<div className="ui huge orange basic inverted icon button" onClick={this.selectTrack.bind(this, scData)}>
 											<i className="play icon"></i>
 										</div>
-										<div className="ui huge pink basic inverted icon button" onClick={this.testVolume}>
-											<i className="heart icon"></i>
-										</div>
+										{likeButton}
 										<div className="ui inverted horizontal divider">{duration}</div>
 									</div>
 

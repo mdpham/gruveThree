@@ -3,10 +3,9 @@ UserPage = React.createClass({
 	getMeteorData() {
 		Meteor.subscribe("favorites");
 		Meteor.subscribe("scUsers");
-		console.log(FavoritesCollection.findOne({id: parseInt(this.props.params.userID)}));
 		return {
 			user: SCUsersCollection.findOne({id: parseInt(this.props.params.userID)}),
-			favorites: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)})
+			favoriter: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)})
 		};
 	},
 	getInitialState() {
@@ -15,20 +14,28 @@ UserPage = React.createClass({
 		};
 	},
 	componentDidUpdate() {
-		console.log('didMount', this.data);
+		// console.log('didMount', this.data);
 	},
 
 	renderFavorites() {
-		if (this.data.favorites !== undefined) {
-			console.log(this.data.favorites.favorites);
-			return this.data.favorites.favorites.map((fav) => {return <TrackCard key={fav.id} scData={fav} />});	
+		if (this.data.favoriter !== undefined && this.data.user !== undefined) {
+			const scUser = this.data.user;
+			const streamType = {
+				//Soundcloud favorites of a user
+				type: "favorites",
+				//Pass soundcloud id to get from FavoritesCollection
+				id: scUser.id
+			};
+			// console.log(this.data.favoriter.favorites);
+			return this.data.favoriter.favorites.map((fav) => {
+				return <TrackCard key={fav.id} scData={fav} streamType={streamType}/>
+			});	
 		} else {
 			return <NotFound />
 		};
 	},
 
 	render() {
-		console.log("rerenderd");
 		const username = this.data.user ? this.data.user.username : "";
 		return (
 			<div className="ui stackable grid container">
