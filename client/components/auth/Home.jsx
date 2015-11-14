@@ -73,22 +73,17 @@ Home = React.createClass({
 					likesByWeek.map((week, weekIndex) => {
 						const weekInterval = moment(week.weekOf, "WW YYYY").format("Do MMMM YYYY") + " - " +moment(week.weekOf, "WW YYYY").add(6, "d").format("Do MMMM YYYY");
 						return (
-							<div className="row" key={"week"+weekIndex}>
+							<div className="one column row" key={"week"+weekIndex}>
 							<div className="ui horizontal divider">{weekInterval}</div>
-							{week.likes.map((like) => {
-								return 	<TrackCard key={like.track.id} scData={like.track} streamType={streamType} />
-							})}
+							<div className="ui column centered stackable grid">
+								{week.likes.map((like) => {
+									return 	<TrackCard key={like.track.id} scData={like.track} streamType={streamType} />
+								})}
+							</div>
 							</div>
 						)
 					})
 				);				
-				// return (
-				// 	this.data.likes.map(
-				// 		(like) => {
-				// 			return <TrackCard key={like.track.id} scData={like.track} streamType={streamType} />;
-				// 		}
-				// 	)
-				// );
 			};
 		};
 	},
@@ -108,7 +103,7 @@ Home = React.createClass({
 					</div>
 				</div>
 				<div className="one column center aligned row">
-				<div id="profileTracks" className="ui fifteen wide column centered stackable grid">
+				<div id="profileTracks" className="ui fifteen wide column centered stackable grid container">
 					{this.renderTracks()}
 				</div>
 				</div>
