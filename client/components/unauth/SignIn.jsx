@@ -34,11 +34,21 @@ SignInForm = React.createClass({
       on: "manual",
       position: "top center",
       duration: 1250,
-      inverted: true,
       onVisible() {
         $(signUpInputs).popup("hide");
       }
     });
+    //Sign in warning
+    const submitButton = this.refs.submitButton;
+    $(submitButton).popup({
+      on: "manual",
+      position: "top center",
+      duration: 1250,
+      popup: "#signInErrorPopup",
+      onVisible() {
+        $(submitButton).popup("hide");
+      }
+    })
     
   },
   componentDidUpdate() {
@@ -63,13 +73,18 @@ SignInForm = React.createClass({
   },
   submitSignIn(creds){
     console.log(creds);
+    $(".usernameField, .passwordField").removeClass("error");
     Meteor.loginWithPassword(creds.username, creds.password, (error) => {
-        if (error !== undefined) {console.log("loginWithPassword:", error)}
-        else {
+        if (error === undefined) {
           //Load and update database, then log in
           console.log("fetching from influences", this.data.influences);
-          this.fetchFromSoundcloud(this.data.influences);
-          // this.history.pushState(null, "/app");
+          this.fetchFromSoundcloud(this.data.influences);          
+        }
+        else {
+          console.log("loginWithPassword:", error);
+          $("#signInErrorPopup").text(error.reason);
+          $(".usernameField, .passwordField").addClass("error");
+          $(this.refs.submitButton).popup("show");
         };
     });
   },
@@ -142,7 +157,7 @@ SignInForm = React.createClass({
     const submitButtonText = this.state.register ? "Sign Up" : "Sign In";
     const registerButtonText = this.state.register ? "Back" : "Register";
     return (
-      <div className="ui inverted segment">
+      <div className="ui inverted orange segment">
       { this.data.currentUser ?
         <div className="ui two big fluid basic inverted buttons">
           <div className="ui button" onClick={this.continueByLoggingOut}>Sign Out</div>
@@ -155,7 +170,8 @@ SignInForm = React.createClass({
           <div className="passwordConfirmField field"><input data-content="Passwords must match" type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
           {/*Sign In or Register*/}
           <div className="field">
-            <button className="ui fluid inverted button" type="submit">{submitButtonText}</button>
+            <button ref="submitButton" className="ui fluid inverted button" type="submit">{submitButtonText}</button>
+            <div id="signInErrorPopup" className="ui popup">error</div>
           </div>
           <div className="registerButton field">
             <div className="ui fluid basic inverted button" onClick={this.registerStateToggle}>{registerButtonText}</div>
