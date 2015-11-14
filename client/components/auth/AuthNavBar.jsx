@@ -33,6 +33,7 @@ AuthNavBar = React.createClass({
 					    </div>
 							<div className="menu">
 								<div className="ui horizontal divider"><i className="orange soundcloud icon"></i></div>
+								<div className="divider"></div>
 								<Link to="/app" className="item"><i className="home icon"></i>You</Link>
 								<Link to="/app/users" className="item"><i className="users icon"></i>People</Link>
 								<div className="divider"></div>

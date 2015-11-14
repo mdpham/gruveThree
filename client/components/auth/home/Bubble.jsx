@@ -27,7 +27,7 @@ Bubble = React.createClass({
 		let mostLiked = this.mostLikedTrack();
 		mostLiked.track.artwork_url = mostLiked.track.artwork_url !== null ? mostLiked.track.artwork_url.replace("large", "t500x500") : "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
 		return (
-			<div className="ui fluid raised segment">
+			<div className="ui fluid raised orange segment">
 				<div className="ui link items">
 				<div className="ui item" onClick={this.selectTrack.bind(this, mostLiked.track)}>
 					<div className="ui tiny image">

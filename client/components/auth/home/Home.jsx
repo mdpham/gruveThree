@@ -1,65 +1,9 @@
 const {History} = ReactRouter;
 
-LikeSearch = React.createClass({
-	initSearch() {
-    let searchSource = this.props.searchContent.map((like) => {return {
-    	title: like.track.title,
-    	username: like.track.user.username,
-    	artwork_url: like.track.artwork_url,
-    	trackData: like.track
-    }});
-    $("#like-search")
-      .search({
-        source : searchSource,
-        fields: {title: "title", description: "username", image:"artwork_url"},
-        searchFields: [
-          "title", "username"
-        ],
-        searchFullText: false,
-        onSelect(result, response) {
-        	console.log(result, response);
-        	const trackData = result.trackData;
-					const streamType = {
-						type: "likes",
-						id: Meteor.userId()
-					};
-					soundManager.player.updateStreamType(streamType);
-					soundManager.player.select(trackData);
-					soundManager.player.start(trackData);
-        }
-        // type: "trackResult",
-        // templates: {
-        // 	trackResult(response) {
-        // 		console.log("response", response);
-        // 		return "<span>stest</span>";
-        // 	}
-        // }
-     });
-  },
-	componentDidMount() {
-		this.initSearch();
-	},
-	componentDidUpdate() {
-		this.initSearch();
-	},
-	render() {
-		return (
-			<div id="like-search" className="ui fluid search">
-			  <div className="ui fluid icon input">
-			    <input className="prompt" type="text" placeholder="Your Likes" />
-			    <i className="search icon"></i>
-			  </div>
-			  <div className="results"></div>
-			</div>
-		);
-	}
-});
-
 Home = React.createClass({
 	mixins: [ReactMeteorData, History],
 	getMeteorData() {
 		Meteor.subscribe("likes");
-		Meteor.subscribe("users");
 		return {
 			isAuthenticated: Meteor.userId() !== null,
 			currentUser: Meteor.user(),
@@ -91,7 +35,7 @@ Home = React.createClass({
 						  <h2 className="ui header">
 								You have no likes!
 						    <div className="sub header">
-						    	<i className="big heart icon"></i>
+						    	<i className="big orange heart outline icon"></i>
 						    </div>
 						  </h2>
 						</div>
@@ -121,7 +65,7 @@ Home = React.createClass({
 				console.log(likesByWeek);
 				return (
 					likesByWeek.map((week, weekIndex) => {
-						const weekInterval = moment(week.weekOf, "WW YYYY").format("Do MMMM YYYY") + " - " +moment(week.weekOf, "WW YYYY").add(6, "d").format("Do MMMM YYYY");
+						const weekInterval = "["+moment(week.weekOf, "WW YYYY").format("Do MMMM YYYY") + "," +moment(week.weekOf, "WW YYYY").add(6, "d").format("Do MMMM YYYY")+"]";
 						return (
 							<div className="one column row" key={"week"+weekIndex}>
 							<div className="ui horizontal divider">{weekInterval}</div>
@@ -143,13 +87,16 @@ Home = React.createClass({
 		return (
 			<div className="ui stackable grid container">
 				<div className="ui fitted horizontal divider">Hey, {this.data.currentUser.username}</div>
-				<div className="three column row">
-					<div className="column">
+				{ this.data.likes.length == 0 ? "" :
+				<div className="row">
+					<div className="six wide column">
 						<LikeSearch searchContent={this.data.likes} />
 					</div>
-					<div className="column"></div>
-					<div className="column"></div>
+					<div className="ten wide column">
+						<Bubble />
+					</div>
 				</div>
+				}
 				<div className="one column center aligned row">
 				<div id="profileTracks" className="ui fifteen wide column centered stackable grid container">
 					{this.renderTracks()}

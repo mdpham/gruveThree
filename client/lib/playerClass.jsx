@@ -98,7 +98,7 @@ class Player extends SoundManager {
 			autoPlay: true,
 			onplay() {
 				player.updateWave(track).updateInfo(track).updateTrack(track);
-				$(".player-button-volumemute i").removeClass("red");
+				$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
 				$(".player-button-pause i").removeClass("play").addClass("pause")
 				$(".player-dimmer").dimmer("hide");
 			},
@@ -144,9 +144,9 @@ class Player extends SoundManager {
 		};
 		//Include for playing after mute,stop,play
 		if (player.sm.getSoundById("current").muted) {
-			$(".player-button-volumemute i").addClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").addClass("red");
 		} else {
-			$(".player-button-volumemute i").removeClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
 		};
 		// return player.sm.getSoundById("current").paused;
 	}
@@ -157,9 +157,9 @@ class Player extends SoundManager {
 	mute(){
 		player.sm.toggleMute("current");
 		if (player.sm.getSoundById("current").muted) {
-			$(".player-button-volumemute i").addClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").addClass("red");
 		} else {
-			$(".player-button-volumemute i").removeClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
 		};
 		// return player.sm.getSoundById("current").muted;
 	}
