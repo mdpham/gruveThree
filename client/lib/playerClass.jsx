@@ -22,7 +22,7 @@ class SoundManager {
 class Player extends SoundManager {
 	constructor(){
 		super();
-		this.volume = 40;
+		this.volume = 10;
 		this.track = null;
 		//Type of list we're playing from: user's likes or a soundcloud favorites
 		this.streamType = {
