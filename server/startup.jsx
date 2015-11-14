@@ -152,7 +152,7 @@ Meteor.methods({
 		};
 		LikesCollection.update({likedBy: Meteor.userId(), "track.id": track.id}, 
 			like, {upsert: true});
-		return prevLike;
+		return;
 	},
 	unlikeTrack: function(track) {
 		//Update in user's profile (for stats)

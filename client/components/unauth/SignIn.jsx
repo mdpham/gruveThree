@@ -27,7 +27,19 @@ SignInForm = React.createClass({
   },
   componentDidMount() {
     if (this.state.register) {$(".passwordConfirmField").transition({animation: "slide down"}).transition("show");}
-    else {$(".passwordConfirmField").transition({animation: "slide down"}).transition("hide");};    
+    else {$(".passwordConfirmField").transition({animation: "slide down"}).transition("hide");};
+    //Sign up warnings
+    const signUpInputs = [this.refs.username, this.refs.password, this.refs.passwordConfirm];
+    $(signUpInputs).popup({
+      on: "manual",
+      position: "top center",
+      duration: 1250,
+      inverted: true,
+      onVisible() {
+        $(signUpInputs).popup("hide");
+      }
+    });
+    
   },
   componentDidUpdate() {
     if (this.state.register) {$(".passwordConfirmField").transition({animation: "slide down"}).transition("show");}
@@ -35,6 +47,7 @@ SignInForm = React.createClass({
   },
   registerStateToggle(e) {
     e.preventDefault();
+    $(".usernameField, .passwordField, .passwordConfirmField").removeClass("error");
     this.setState({register: !this.state.register});
   },
   //
@@ -64,19 +77,48 @@ SignInForm = React.createClass({
     console.log(creds);
     // let profile = {likes: []};
     //CHECK STRINGS
-    Accounts.createUser(creds,
-      (error) => {
-        if (error !== undefined) {console.log("createUser:", error)}
-        else {
-          console.log("account created, log in", creds);
-          let username = creds.username;
-          let password = creds.password;
-          Meteor.loginWithPassword({username}, password, (error) => {
-            if (error !== undefined) {console.log("loginWithPassword", error);}
-            else {this.history.pushState(null, "/app");};
+    //Alphanumeric 
+    const alphanumeric = /^([a-zA-Z0-9-_])+$/;
+    if (alphanumeric.test(creds.username)) {
+      $(".usernameField").removeClass("error");
+      if (alphanumeric.test(creds.password)) {
+        $(".passwordField").removeClass("error");
+        if (creds.password === creds.passwordConfirm) {
+          $(".passwordConfirmField").removeClass("error");
+          Accounts.createUser(creds,
+            (error) => {
+              if (error !== undefined) {console.log("createUser:", error)}
+              else {
+                console.log("account created, log in", creds);
+                const username = creds.username;
+                const password = creds.password;
+                Meteor.loginWithPassword({username}, password, (error) => {
+                  if (error !== undefined) {console.log("loginWithPassword", error);}
+                  else {this.history.pushState(null, "/app");};
+                });
+              };
           });
-        };
-    });
+        }
+        else {
+        //Password mismatch
+          console.log("passwords don't match", creds.password, creds.passwordConfirm);
+          $(this.refs.passwordConfirm).popup("show");
+          $(".passwordConfirmField").addClass("error");
+        }
+      }
+      else {
+        //Non alphanumeric password
+        console.log("non alphanum password", creds.password);
+        $(this.refs.password).popup("show");
+        $(".passwordField").addClass("error");
+      }
+    }
+    else {
+    //Non alphanumeric
+      console.log("non alphanumeric username", creds.username);
+      $(this.refs.username).popup("show");
+      $(".usernameField").addClass("error");
+    };
   },
   submitForm(e) {
     e.preventDefault();
@@ -108,9 +150,9 @@ SignInForm = React.createClass({
         </div>
         :
         <form id="signInForm" className="ui equal width inverted form" onSubmit={this.submitForm}>
-          <div className="field"><input type="text" ref="username" placeholder="Username" /></div>
-          <div className="field"><input type="password" ref="password" placeholder="Password" /></div>
-          <div className="passwordConfirmField field"><input type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
+          <div className="usernameField field"><input data-content="Username must be alphanumeric" type="text" ref="username" placeholder="Username" /></div>
+          <div className="passwordField field"><input data-content="Password must be alphanumeric" type="password" ref="password" placeholder="Password" /></div>
+          <div className="passwordConfirmField field"><input data-content="Passwords must match" type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
           {/*Sign In or Register*/}
           <div className="field">
             <button className="ui fluid inverted button" type="submit">{submitButtonText}</button>
