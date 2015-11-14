@@ -113,10 +113,10 @@ SignInForm = React.createClass({
           <div className="passwordConfirmField field"><input type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
           {/*Sign In or Register*/}
           <div className="field">
-            <button className="ui fluid button" type="submit">{submitButtonText}</button>
+            <button className="ui fluid inverted button" type="submit">{submitButtonText}</button>
           </div>
           <div className="registerButton field">
-            <div className="ui fluid button" onClick={this.registerStateToggle}>{registerButtonText}</div>
+            <div className="ui fluid basic inverted button" onClick={this.registerStateToggle}>{registerButtonText}</div>
           </div>
         </form>
       }
@@ -162,7 +162,7 @@ SignIn = React.createClass({
         </div>
         <div className="one column row">
           <div className="center aligned column">
-            <div className="ui huge circular icon button" onClick={this.openInfoModal}><i className="big info icon"></i></div>
+            <div className="ui huge orange basic inverted circular icon button" onClick={this.openInfoModal}><i className="orange inverted big info icon"></i></div>
             <InfoModal />
           </div>
         </div>

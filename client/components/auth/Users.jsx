@@ -37,11 +37,12 @@ UserCard = React.createClass({
 		switch (scData.id) {
 			case 49699208: description = "me"; break;
 			case 69813820: description = "meh"; break;
-			case 78954835: description = "2/3"; break;
-			case 158395759: description = "bf"; break;
-			case 79933909: description = "3/3"; break;
-			case 135282929: description = "one punch man"; break;
+			case 78954835: description = "one of three"; break;
+			case 158395759: description = "the bestfriend"; break;
+			case 79933909: description = "one of three"; break;
+			case 135282929: description = "juuuuan"; break;
 			case 86950103: description = "red bull"; break;
+			default: description = "Fetching likes"; break;
 		};
 		return(
 			

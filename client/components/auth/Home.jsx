@@ -11,11 +11,48 @@ Home = React.createClass({
 			likes: LikesCollection.find({likedBy: Meteor.userId()}, {sort: {likedAt: -1}}).fetch()
 		};
 	},
+	initSearch() {
+    let searchSource = this.data.likes.map((like) => {return {
+    	title: like.track.title,
+    	username: like.track.user.username,
+    	artwork_url: like.track.artwork_url,
+    	trackData: like.track
+    }});
+    $("#like-search")
+      .search({
+        source : searchSource,
+        fields: {title: "title", description: "username", image:"artwork_url"},
+        searchFields: [
+          "title", "username"
+        ],
+        searchFullText: false,
+        onSelect(result, response) {
+        	console.log(result, response);
+        	const trackData = result.trackData;
+					const streamType = {
+						type: "likes",
+						id: Meteor.userId()
+					};
+					soundManager.player.updateStreamType(streamType);
+					soundManager.player.select(trackData);
+					soundManager.player.start(trackData);
+        }
+        // type: "trackResult",
+        // templates: {
+        // 	trackResult(response) {
+        // 		console.log("response", response);
+        // 		return "<span>stest</span>";
+        // 	}
+        // }
+     });
+	},
 	componentDidMount() {
 		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
+		this.initSearch();
 	},
 	componentDidUpdate() {
 		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
+		this.initSearch();
 	},
 
 	renderTracks() {
@@ -28,12 +65,6 @@ Home = React.createClass({
 				id: Meteor.userId()
 			};
 			//Sort by week
-			// const likes = this.data.likes.reverse();
-			// var accumulator = [];
-			// var currentWeek;
-			// likes.forEach((l,i,a) => {
-			// 	console.log(moment(l.likedAt).isoWeek());
-			// });
 			if (this.data.likes.length === 0) {
 				return (
 					<div className="one column center aligned row">
@@ -93,14 +124,18 @@ Home = React.createClass({
 		return (
 			<div className="ui stackable grid container">
 				<div className="ui fitted horizontal divider">Hey, {this.data.currentUser.username}</div>
-				<div className="one column row">
+				<div className="three column row">
 					<div className="column">
-						<div className="ui fluid buttons">
-							<div className="ui button">a</div>
-							<div className="ui button">a</div>
-							<div className="ui button">a</div>
+						<div id="like-search" className="ui fluid search">
+						  <div className="ui fluid icon input">
+						    <input className="prompt" type="text" placeholder="Your Likes" />
+						    <i className="search icon"></i>
+						  </div>
+						  <div className="results"></div>
 						</div>
 					</div>
+					<div className="column"></div>
+					<div className="column"></div>
 				</div>
 				<div className="one column center aligned row">
 				<div id="profileTracks" className="ui fifteen wide column centered stackable grid container">
