@@ -30,7 +30,7 @@ AuthApp = React.createClass({
 			<div id="authApp">
 				<AuthNavBar />
 
-				<div style={{"marginTop": "100", "marginBottom": "100"}}>{this.props.children}</div>
+				<div id="authAppBody" style={{"marginTop": "100", "marginBottom": "100"}}>{this.props.children}</div>
 
 				<Player />
 			</div>

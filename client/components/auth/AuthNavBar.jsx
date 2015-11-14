@@ -1,6 +1,18 @@
 const {Link} = ReactRouter;
 
 AuthNavBar = React.createClass({
+	componentDidMount(){
+		$("#gruve-three-dropdown")
+			.popup({
+				popup: "#like-notification",
+				position: "bottom left",
+				on: "manual",
+				duration: 1012,
+				onVisible() {
+					$("#gruve-three-dropdown").popup("hide");
+				}
+			});
+	},
 	//Helpers
 	signOut() {
 		Meteor.logout(() => {
@@ -15,7 +27,9 @@ AuthNavBar = React.createClass({
 				<div className="ui fluid container">
 						<div className="ui simple dropdown item">
 					    <div className="middle aligned content">
-					      <span className="ui big inverted header">GruveThree</span>
+					      <span id="gruve-three-dropdown" className="ui big inverted header">GruveThree</span>
+					    {/*For indicating a track has been liked*/}
+					      <div id="like-notification" className="ui inverted popup">Liked!</div>
 					    </div>
 							<div className="menu">
 								<div className="ui horizontal divider"><i className="orange soundcloud icon"></i></div>
