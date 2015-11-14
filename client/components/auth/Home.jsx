@@ -65,7 +65,7 @@ Home = React.createClass({
 				console.log(likesByWeek);
 				return (
 					likesByWeek.map((week, weekIndex) => {
-						const weekInterval = moment(week.weekOf, "WW YYYY").format("Do MMMM YYYY") + " - " +moment(week.weekOf, "WW YYYY").add(6, "d").format("Do MMMM YYYY");
+						const weekInterval = "["+moment(week.weekOf, "WW YYYY").format("Do MMMM YYYY") + "," +moment(week.weekOf, "WW YYYY").add(6, "d").format("Do MMMM YYYY")+"]";
 						return (
 							<div className="one column row" key={"week"+weekIndex}>
 							<div className="ui horizontal divider">{weekInterval}</div>
@@ -87,6 +87,7 @@ Home = React.createClass({
 		return (
 			<div className="ui stackable grid container">
 				<div className="ui fitted horizontal divider">Hey, {this.data.currentUser.username}</div>
+				{ this.data.likes.length == 0 ? "" :
 				<div className="row">
 					<div className="six wide column">
 						<LikeSearch searchContent={this.data.likes} />
@@ -95,6 +96,7 @@ Home = React.createClass({
 						<Bubble />
 					</div>
 				</div>
+				}
 				<div className="one column center aligned row">
 				<div id="profileTracks" className="ui fifteen wide column centered stackable grid container">
 					{this.renderTracks()}
