@@ -75,7 +75,7 @@ Home = React.createClass({
 						return (
 							<div className="one column row" key={"week"+weekIndex}>
 							<div className="ui horizontal divider">{weekInterval}</div>
-							<div className="ui column centered stackable grid">
+							<div className="ui column center aligned stackable grid">
 								{week.likes.map((like) => {
 									return 	<TrackCard key={like.track.id} scData={like.track} streamType={streamType} />
 								})}
