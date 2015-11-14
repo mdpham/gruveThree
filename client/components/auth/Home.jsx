@@ -1,18 +1,8 @@
 const {History} = ReactRouter;
 
-Home = React.createClass({
-	mixins: [ReactMeteorData, History],
-	getMeteorData() {
-		Meteor.subscribe("likes");
-		return {
-			isAuthenticated: Meteor.userId() !== null,
-			currentUser: Meteor.user(),
-			//Sort by most recent (descending)
-			likes: LikesCollection.find({likedBy: Meteor.userId()}, {sort: {likedAt: -1}}).fetch()
-		};
-	},
+LikeSearch = React.createClass({
 	initSearch() {
-    let searchSource = this.data.likes.map((like) => {return {
+    let searchSource = this.props.searchContent.map((like) => {return {
     	title: like.track.title,
     	username: like.track.user.username,
     	artwork_url: like.track.artwork_url,
@@ -45,14 +35,42 @@ Home = React.createClass({
         // 	}
         // }
      });
-	},
+  },
 	componentDidMount() {
-		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
 		this.initSearch();
 	},
 	componentDidUpdate() {
-		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
 		this.initSearch();
+	},
+	render() {
+		return (
+			<div id="like-search" className="ui fluid search">
+			  <div className="ui fluid icon input">
+			    <input className="prompt" type="text" placeholder="Your Likes" />
+			    <i className="search icon"></i>
+			  </div>
+			  <div className="results"></div>
+			</div>
+		);
+	}
+});
+
+Home = React.createClass({
+	mixins: [ReactMeteorData, History],
+	getMeteorData() {
+		Meteor.subscribe("likes");
+		return {
+			isAuthenticated: Meteor.userId() !== null,
+			currentUser: Meteor.user(),
+			//Sort by most recent (descending)
+			likes: LikesCollection.find({likedBy: Meteor.userId()}, {sort: {likedAt: -1}}).fetch()
+		};
+	},
+	componentDidMount() {
+		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
+	},
+	componentDidUpdate() {
+		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
 	},
 
 	renderTracks() {
@@ -126,13 +144,7 @@ Home = React.createClass({
 				<div className="ui fitted horizontal divider">Hey, {this.data.currentUser.username}</div>
 				<div className="three column row">
 					<div className="column">
-						<div id="like-search" className="ui fluid search">
-						  <div className="ui fluid icon input">
-						    <input className="prompt" type="text" placeholder="Your Likes" />
-						    <i className="search icon"></i>
-						  </div>
-						  <div className="results"></div>
-						</div>
+						<LikeSearch searchContent={this.data.likes} />
 					</div>
 					<div className="column"></div>
 					<div className="column"></div>
