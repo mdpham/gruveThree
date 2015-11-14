@@ -135,12 +135,18 @@ Meteor.methods({
 			);
 		}
 		else {
+			// Meteor.users.update({_id: Meteor.user()._id, "profile.likes.track.id": track.id},
+			// 	{
+			// 		$set: {"profile.likes.$.numberOfLikes": count, "profile.likes.$.currentlyLiked": true}
+			// 	});
 			Meteor.users.update({_id: Meteor.user()._id, "profile.likes.track.id": track.id},
 				{
-					$set: {"profile.likes.$.numberOfLikes": count, "profile.likes.$.currentlyLiked": true}
-				});
+					$set: {"profile.likes.$": likeInProfile}
+				},
+				{upsert: true}
+			);
 			console.log("IN PROFILE LIKES");
-		}
+		};
 
 		//Update in Likes collection
 		const like = {
@@ -148,7 +154,8 @@ Meteor.methods({
 			likedAt: new Date(),
 			track: track
 		};
-		LikesCollection.update({likedBy: Meteor.userId(), "track.id": track.id}, like, {upsert: true});
+		LikesCollection.update({likedBy: Meteor.userId(), "track.id": track.id}, 
+			like, {upsert: true});
 		return Meteor.user().profile.likes;
 	},
 	unlikeTrack: function(track) {
