@@ -126,11 +126,32 @@ SignInForm = React.createClass({
 })
 
 SignIn = React.createClass({
+  openInfoModal() {
+    $("#info-modal")
+      .modal({
+        onApprove() {
+          console.log("log in as guest");
+          Meteor.loginWithPassword("Guest", "password", (error) => {
+              if (error !== undefined) {console.log("loginWithPassword:", error)}
+              else {
+                //Load and update database, then log in
+                // console.log("fetching from influences", this.data.influences);
+                // this.fetchFromSoundcloud(this.data.influences);
+                // this.history.pushState(null, "/app");
+              };
+          });
+        }
+      })
+      .modal("show");
+  },
   render() {
     return (
       <div>
       <div className="ui inverted segment">
-        <div className="ui huge centered header">GruveThree</div>
+        <div className="ui huge inverted centered header">
+          GruveThree
+          <div className="sub header">Powered by <a href="https://www.soundcloud.com" target="_blank"><i className="big orange soundcloud icon"></i></a></div>
+        </div>
       </div>
     	<div className="ui centered grid container">
         <div className="row">
@@ -141,10 +162,8 @@ SignIn = React.createClass({
         </div>
         <div className="one column row">
           <div className="center aligned column">
-            <div className="ui huge circular icon button"><i className="big info icon"></i></div>
-          </div>
-          <div className="center aligned column">
-            <a className="item" href="https://www.soundcloud.com" target="_blank">Soundcloud</a>
+            <div className="ui huge circular icon button" onClick={this.openInfoModal}><i className="big info icon"></i></div>
+            <InfoModal />
           </div>
         </div>
     	</div>
