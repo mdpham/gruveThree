@@ -7,7 +7,8 @@ Home = React.createClass({
 		return {
 			isAuthenticated: Meteor.userId() !== null,
 			currentUser: Meteor.user(),
-			likes: LikesCollection.find({likedBy: Meteor.userId()}).fetch()
+			//Sort by most recent (descending)
+			likes: LikesCollection.find({likedBy: Meteor.userId()}, {sort: {likedAt: -1}}).fetch()
 		};
 	},
 	componentDidMount() {
@@ -26,6 +27,15 @@ Home = React.createClass({
 				type: "likes",
 				id: Meteor.userId()
 			};
+			//Sort by week
+			// const likes = this.data.likes.reverse();
+			// var accumulator = [];
+			// var currentWeek;
+			// likes.forEach((l,i,a) => {
+			// 	console.log(moment(l.likedAt).isoWeek());
+			// });
+
+			//
 			return (this.data.likes.map((like) => {
 				return <TrackCard key={like.track.id} scData={like.track} streamType={streamType} />;
 			}));
