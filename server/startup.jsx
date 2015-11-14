@@ -90,9 +90,9 @@ Meteor.methods({
 			//Meteor user
 			case "likes":
 				let userId = Meteor.userId();
-				let likes = LikesCollection.find({likedBy: userId}).fetch();
+				let likes = LikesCollection.find({likedBy: userId}, {sort: {likedAt: -1}}).fetch();
 				if (random) {
-					next = _.sample(likes);
+					next = _.sample(likes).track;
 				}
 				else {
 					const currentPosn = likes.findIndex((e,i,a) => {
