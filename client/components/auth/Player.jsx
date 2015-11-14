@@ -42,6 +42,11 @@ Player = React.createClass({
 		// this.setState({random});
 	},
 
+	heart() {
+		//In .player to get track data
+		soundManager.player.like();
+	},
+
 	componentDidMount() {
 		$(ReactDOM.findDOMNode(this)).transition("hide");
 
@@ -154,7 +159,7 @@ Player = React.createClass({
 									</div>
 								</div>
 								<div className="center aligned two wide column">
-									<div className="player-button-like ui tiny circular basic inverted pink icon button">
+									<div className="player-button-like ui tiny circular basic inverted pink icon button" onClick={this.heart}>
 										<i className={"pink heart"+playerIcon}></i>
 									</div>
 								</div>

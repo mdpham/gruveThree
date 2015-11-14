@@ -3,9 +3,11 @@ const {History} = ReactRouter;
 Home = React.createClass({
 	mixins: [ReactMeteorData, History],
 	getMeteorData() {
+		Meteor.subscribe("likes");
 		return {
 			isAuthenticated: Meteor.userId() !== null,
-			currentUser: Meteor.user()
+			currentUser: Meteor.user(),
+			likes: LikesCollection.find({likedBy: Meteor.userId()}).fetch()
 		};
 	},
 	componentDidMount() {
@@ -16,15 +18,22 @@ Home = React.createClass({
 	},
 
 	renderTracks() {
-		if (!this.data.currentUser) {
+		if (!this.data.likes) {
 			return (<div>Go get some likes</div>);
 		}
 		else {
-			return (this.data.currentUser.profile.likes.length);
+			const streamType = {
+				type: "likes",
+				id: Meteor.userId()
+			};
+			return (this.data.likes.map((like) => {
+				return <TrackCard key={like.track.id} scData={like.track} streamType={streamType} />;
+			}));
 		};
 	},
 	render() {
-		if (!this.data.currentUser) {return <NotFound />}
+		if (!this.data.currentUser || !this.data.likes) {return <NotFound />}
+		console.log("likes: ", this.data.likes);
 		return (
 			<div className="ui stackable grid container">
 				<div className="ui horizontal divider">{this.data.currentUser.username}</div>

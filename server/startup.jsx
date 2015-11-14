@@ -23,9 +23,13 @@ Meteor.startup(() => {
 	Meteor.publish("favorites", () => {
 		return FavoritesCollection.find();
 	});
+	Meteor.publish("likes", () => {
+		return LikesCollection.find();
+	})
 });
 
 Meteor.methods({
+	//Updating mongo db on sign in to get the latest data;
 	updateSCUsers: function(user) {
 		console.log("update user:", user);
 		//Change avatar profile picture resolution if it exists
@@ -46,7 +50,6 @@ Meteor.methods({
 		// }
 		, {upsert: true});
 	},
-
 	updateFavorites: function(userID, favorites, currentTrack) {
 		//soundcloud userID
 		console.log("update favorites", userID, favorites);
@@ -57,6 +60,7 @@ Meteor.methods({
 		}, {upsert:true});
 	},
 
+	//Player
 	upcomingTrack: function(streamType, random, currentTrack) {
 		console.log("upcomingTrack", streamType, random);
 		var next = null;
@@ -89,5 +93,27 @@ Meteor.methods({
 		};
 		// console.log("return object", next);
 		return next;
+	},
+
+	//Liker
+	likeTrack: function(track) {
+		console.log(Meteor.user().profile.likes, LikesCollection.find({}).fetch());
+		//Update track in user profile
+		// Meteor.users.update({_id: Meteor.user()._id}, {
+		// 	$push: {
+		// 		"profile.likes": track.id
+		// 	}
+		// }, {upsert:true});
+		//Update in Likes collection
+		const like = {
+			likedBy: Meteor.userId(),
+			likedAt: new Date(),
+			track: track
+		};
+		LikesCollection.update({likedBy: Meteor.userId(), "track.id": track.id}, like, {upsert: true});
+		return LikesCollection.find({likedBy: Meteor.userId()}).fetch();
+	},
+	unlikeTrack: function(track) {
+		LikesCollection.remove({likedBy: Meteor.userId(), "track.id": track.id});
 	}
 });

@@ -166,10 +166,10 @@ class Player extends SoundManager {
 
 
 	//LIKE
+	//Calls function in Liker Class
 	like(){
 		let currentTrack = player.track;
-		//Pass this to Meteor call to update
-		//Meteor method returns status
+		player.sm.liker.like(currentTrack);
 	}
 
 	//PLAYBACK
