@@ -42,6 +42,7 @@ UserCard = React.createClass({
 			case 79933909: description = "one of three"; break;
 			case 135282929: description = "juuuuan"; break;
 			case 86950103: description = "red bull"; break;
+			case 83824614: description = "ICE EU"; break;
 			default: description = "Fetching likes"; break;
 		};
 		return(

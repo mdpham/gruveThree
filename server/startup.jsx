@@ -10,10 +10,11 @@ Meteor.startup(() => {
 	// console.log(InfluencesCollection.find().fetch());
 
 	//Add initial influences for app
-	if (InfluencesCollection.find().count() === 0) {
-		[49699208,69813820,78954835,158395759,79933909,135282929,86950103].forEach((scUserID)=>{InfluencesCollection.insert({scUserID:scUserID})});
-		console.log(InfluencesCollection.find().fetch());
-	};
+	const prescribedUsers = [49699208,69813820,78954835,158395759,79933909,135282929,86950103,83824614];
+	prescribedUsers.forEach((scUserID)=>{
+		InfluencesCollection.update({scUserID:scUserID}, {scUserID:scUserID}, {upsert:true});
+	});
+	console.log("Influences: :", InfluencesCollection.find().fetch());
 	Meteor.publish("influences", () => {
 		return InfluencesCollection.find();
 	});
@@ -35,20 +36,7 @@ Meteor.methods({
 		//Change avatar profile picture resolution if it exists
 		if (!user.avatar_url.includes("default_avatar")) {user.avatar_url = user.avatar_url.replace("large", "t500x500")};
 		//Update into database
-		SCUsersCollection.update({id: user.id}, user
-		// {
-			// $set: {
-			// 	avatar_url: user.avatar_url,
-			// 	followers_count: user.followers_count,
-			// 	id: user.id,
-			// 	permalink_url: user.permalink_url,
-			// 	playlist_count: user.playlist_count,
-			// 	public_favorites_count: user.public_favorites_count,
-			// 	uri: user.uri,
-			// 	username: user.username
-			// }
-		// }
-		, {upsert: true});
+		SCUsersCollection.update({id: user.id}, user, {upsert: true});
 	},
 	updateFavorites: function(userID, favorites, currentTrack) {
 		//soundcloud userID
