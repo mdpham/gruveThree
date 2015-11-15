@@ -115,15 +115,17 @@ Player = React.createClass({
 									<div id="player-show-volume" className="ui tiny circular basic inverted icon button">
 										<i className={"volume up"+playerIcon}></i>
 									</div>
-									<div id="player-popup-volume" className="ui inverted popup one column center aligned grid">
-										<div className={"player-button-volumedown basic"+playerButton} onClick={this.changeVolume.bind(this, false)}>
-											<i className={"green minus"+playerIcon}></i>
-										</div>
-										<div className={"player-button-volumemute red basic"+playerButton} onClick={this.mute}>
-											<i className={"volume off"+playerIcon}></i>
-										</div>
-										<div className={"player-button-volumeup basic"+playerButton} onClick={this.changeVolume.bind(this, true)}>
-											<i className={"green plus"+playerIcon}></i>
+									<div id="player-popup-volume" className="ui inverted popup">
+										<div className="ui three buttons">
+											<div className={"player-button-volumedown basic"+playerButton} onClick={this.changeVolume.bind(this, false)}>
+												<i className={"green minus"+playerIcon}></i>
+											</div>
+											<div className={"player-button-volumemute red basic"+playerButton} onClick={this.mute}>
+												<i className={"volume off"+playerIcon}></i>
+											</div>
+											<div className={"player-button-volumeup basic"+playerButton} onClick={this.changeVolume.bind(this, true)}>
+												<i className={"green plus"+playerIcon}></i>
+											</div>
 										</div>
 									</div>
 								</div>
