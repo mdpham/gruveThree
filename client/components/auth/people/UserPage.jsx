@@ -10,40 +10,55 @@ UserPage = React.createClass({
 	},
 	getInitialState() {
 		return {
-			userID: this.props.params.userID
+			showFavorites: true
 		};
 	},
 	componentDidUpdate() {
 		// console.log('didMount', this.data);
 	},
 
-	renderFavorites() {
-		if (this.data.favoriter !== undefined && this.data.user !== undefined) {
-			const scUser = this.data.user;
-			const streamType = {
-				//Soundcloud favorites of a user
-				type: "favorites",
-				//Pass soundcloud id to get from FavoritesCollection
-				id: scUser.id
-			};
-			// console.log(this.data.favoriter.favorites);
-			return this.data.favoriter.favorites.map((fav) => {
-				return <TrackCard key={fav.id} scData={fav} streamType={streamType}/>
-			});	
-		} else {
-			return <NotFound />
+	//On toggle click
+	toggleFavoritesPlaylists(showFavorites) {
+		if (showFavorites !== this.state.showFavorites) {
+			//Otherwise we're already at the state we clicked for
+			this.setState({showFavorites});
 		};
 	},
-
 	render() {
 		const username = this.data.user ? this.data.user.username : "";
+		const favoritesCount = this.data.user ? this.data.user.public_favorites_count : "";
+		const playlistsCount = this.data.user ? this.data.user.playlist_count : "";
+		const showFavoritesLabel = "ui orange circular label"+ (this.state.showFavorites ? "" : " basic");
+		const showPlaylistsLabel = "ui orange circular label"+ (this.state.showFavorites ? " basic" : "");
 		return (
 			<div className="ui stackable grid container">
-				<div className="ui horizontal divider">{username}</div>
 				<div className="one column row">
-				<div className="ui column centered stackable grid">
-					{this.renderFavorites()}
+					<div className="bottom aligned column">
+						<div className="ui fitted horizontal divider">
+							<div className="ui huge header">
+								{username}
+								<div className="sub header">
+										<a onClick={this.toggleFavoritesPlaylists.bind(this, true)} className={showFavoritesLabel}>
+											Favorites
+											<div className="detail">{favoritesCount}</div>
+										</a>
+										<a onClick={this.toggleFavoritesPlaylists.bind(this, false)} className={showPlaylistsLabel}>
+											Playlists
+											<div className="detail">{playlistsCount}</div>
+										</a>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
+
+				<div className="one column row">
+					{
+						this.state.showFavorites ? 
+						<UserFavorites user={this.data.user} favoriter={this.data.favoriter} />
+						:
+						<UserPlaylists user={this.data.user} favoriter={this.data.favoriter} /> 
+					}
 				</div>
 			</div>
 		);
