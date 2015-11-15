@@ -19,7 +19,7 @@ UserFavorites = React.createClass({
 	},
 
 	render() {
-		console.log("likes");
+		console.log("favorites", this.props.favoriter);
 		return (
 			<div className="ui column centered stackable grid">
 				{this.renderFavorites()}

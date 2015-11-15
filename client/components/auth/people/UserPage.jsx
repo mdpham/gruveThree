@@ -57,7 +57,7 @@ UserPage = React.createClass({
 						this.state.showFavorites ? 
 						<UserFavorites user={this.data.user} favoriter={this.data.favoriter} />
 						:
-						<UserPlaylists user={this.data.user} favoriter={this.data.favoriter} /> 
+						<UserPlaylists user={this.data.user} favoriter={this.data.user} /> 
 					}
 				</div>
 			</div>
