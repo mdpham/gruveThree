@@ -5,7 +5,9 @@ UserPage = React.createClass({
 		Meteor.subscribe("scUsers");
 		return {
 			user: SCUsersCollection.findOne({id: parseInt(this.props.params.userID)}),
-			favoriter: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)})
+			favoriter: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)}),
+			//Set to true once user toggles to playlists and they're loaded, only changed once
+			loadedPlaylists: false
 		};
 	},
 	getInitialState() {
@@ -19,6 +21,9 @@ UserPage = React.createClass({
 
 	//On toggle click
 	toggleFavoritesPlaylists(showFavorites) {
+		if (!showFavorites) {
+			//Get playlists
+		}
 		if (showFavorites !== this.state.showFavorites) {
 			//Otherwise we're already at the state we clicked for
 			this.setState({showFavorites});

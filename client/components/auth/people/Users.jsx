@@ -8,6 +8,7 @@ UserCard = React.createClass({
 		$(".select-dimmer").dimmer("hide"); //Hide all loading if new user selected
 		let loader = $(ReactDOM.findDOMNode(this)).find(".select-dimmer");
 		loader.dimmer("show");
+		//Get favorite tracks and playlists
 		SC.get("/users/"+userID+"/favorites", {limit: 100})
 			.then((favorites) => {
 				// console.log(favorites);
