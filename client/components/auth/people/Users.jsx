@@ -9,18 +9,26 @@ UserCard = React.createClass({
 		let loader = $(ReactDOM.findDOMNode(this)).find(".select-dimmer");
 		loader.dimmer("show");
 		//Get favorite tracks and playlists
-		SC.get("/users/"+userID+"/favorites", {limit: 100})
-			.then((favorites) => {
-				// console.log(favorites);
-				Meteor.call("updateFavorites", userID, favorites, (error, result) => {
+		let promiseFavorites = SC.get("/users/"+userID+"/favorites", {limit: 100});
+		let promisePlaylists = SC.get("/users/"+userID+"/playlists");
+
+		Promise.all([promiseFavorites, promisePlaylists])
+			.then((result) => {
+				console.log("all promises", result);
+				Meteor.call("updateUserOnSelect", userID, result, (error, result) => {
 					loader.dimmer("hide");
 					this.history.pushState(null, "/app/users/"+userID)
 				});
 			});
-			// .then((favorites)=>{
-			// 	console.log(favorites);
-			// 	this.history.pushState(null, "/app/users/"+userID)
-			// }); 
+		// SC.get("/users/"+userID+"/favorites", {limit: 100})
+		// 	.then((favorites) => {
+		// 		// console.log(favorites);
+
+		// 	});
+		// 	// .then((favorites)=>{
+		// 	// 	console.log(favorites);
+		// 	// 	this.history.pushState(null, "/app/users/"+userID)
+		// 	// }); 
 		
 	},
 	componentDidMount() {

@@ -38,9 +38,13 @@ Meteor.methods({
 		//Update into database
 		SCUsersCollection.update({id: user.id}, user, {upsert: true});
 	},
-	updateFavorites: function(userID, favorites, currentTrack) {
+	//On select of a user in /users, update info. result is data from two favorites+playlist SC API calls
+	updateUserOnSelect: function(userID, result) {
 		//soundcloud userID
 		console.log("update favorites", userID, favorites);
+		//Order of promises in UserCcard
+		let favorites = result[0];
+		let playlists = result[1];
 		FavoritesCollection.update({id: userID}, {
 			$set: {
 				favorites: favorites
