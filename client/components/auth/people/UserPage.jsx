@@ -4,7 +4,6 @@ UserPage = React.createClass({
 		Meteor.subscribe("scUsers");
 		Meteor.subscribe("favorites");
 		Meteor.subscribe("playlists");
-		console.log(parseInt(this.props.params.userID));
 		return {
 			user: SCUsersCollection.findOne({id: parseInt(this.props.params.userID)}),
 			favoriter: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)}),
@@ -28,7 +27,7 @@ UserPage = React.createClass({
 		};
 	},
 	render() {
-		console.log("userpage", this.data.playlisters);
+		// console.log("userpage", this.data.playlisters);
 		const username = this.data.user ? this.data.user.username : "";
 		const favoritesCount = this.data.favoriter ? this.data.favoriter.favorites.length : "...";
 		const playlistsCount = this.data.playlisters ? this.data.playlisters.length : "...";

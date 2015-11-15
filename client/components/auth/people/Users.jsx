@@ -9,7 +9,7 @@ UserCard = React.createClass({
 		let loader = $(ReactDOM.findDOMNode(this)).find(".select-dimmer");
 		loader.dimmer("show");
 		//Get favorite tracks and playlists
-		let promiseFavorites = SC.get("/users/"+userID+"/favorites", {limit: 100});
+		let promiseFavorites = SC.get("/users/"+userID+"/favorites", {limit: 500});
 		let promisePlaylists = SC.get("/users/"+userID+"/playlists");
 
 		Promise.all([promiseFavorites, promisePlaylists])
