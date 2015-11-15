@@ -47,7 +47,7 @@ UserCard = React.createClass({
 		return(
 			
 			<div className="five wide column">
-				<div className="ui hidden segment">
+				<div className="ui orange raised segment">
 					<div className="user ui fluid card">
 							<div className="ui fluid image">
 								<div className="ui hover-dimmer dimmer">

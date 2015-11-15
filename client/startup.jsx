@@ -1,6 +1,8 @@
 const {Router, Route, IndexRoute, Link} = ReactRouter;
 const history = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
 
+// Meteor.absoluteUrl({secure: true, replaceLocalhost: true});
+
 Meteor.startup(()=>{
 	//
 	SC.initialize({
@@ -20,6 +22,7 @@ Meteor.startup(()=>{
 			<Route path="users/:userID" component={UserPage} />
 		</Route>
 		<Route path="*" component={NotFound} />
+
 		</Router>
 	), renderTarget);
 });

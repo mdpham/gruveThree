@@ -25,14 +25,29 @@ LikeSearch = React.createClass({
 					soundManager.player.select(trackData);
 					soundManager.player.start(trackData);
         }
-        // type: "trackResult",
-        // templates: {
-        // 	trackResult(response) {
-        // 		console.log("response", response);
-        // 		return "<span>stest</span>";
-        // 	}
-        // }
      });
+
+      $("#test-search")
+        .search({
+            fields: {title: "title", description: "description", results:"results"},
+            apiSettings: {
+                url: "//api.soundcloud.com/tracks?q={query}&client_id=7b734feadab101a0d2aeea04f6cd02cc",
+                onResponse(result) {
+                    console.log("RESPONSE", result);
+                    const response = {
+                        results: Object.keys(result).map((k) => {
+                        const t = result[k];
+                        return {
+                            title: t.title,
+                            description: t.user.username
+                        };
+                    })};
+                    console.log(result);
+                    return response;
+                }
+
+            }
+        })
   },
 	componentDidMount() {
 		this.initSearch();
@@ -42,6 +57,7 @@ LikeSearch = React.createClass({
 	},
 	render() {
 		return (
+            <div>
 			<div id="like-search" className="ui fluid search">
 			  <div className="ui fluid icon input">
 			    <input className="prompt" type="text" placeholder="Your Likes" />
@@ -49,6 +65,16 @@ LikeSearch = React.createClass({
 			  </div>
 			  <div className="results"></div>
 			</div>
+
+            <div id="test-search" className="ui fluid search">
+              <div className="ui fluid icon input">
+                <input className="prompt" type="text" placeholder="Test" />
+                <i className="search icon"></i>
+              </div>
+              <div className="results"></div>
+            </div>
+
+            </div>
 		);
 	}
 });
