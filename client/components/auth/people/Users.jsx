@@ -16,6 +16,7 @@ UserCard = React.createClass({
 			.then((result) => {
 				console.log("all promises", result);
 				Meteor.call("updateUserOnSelect", userID, result, (error, result) => {
+					console.log("updateUserOnSelect", error, result);
 					loader.dimmer("hide");
 					this.history.pushState(null, "/app/users/"+userID)
 				});

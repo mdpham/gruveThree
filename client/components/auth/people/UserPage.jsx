@@ -1,13 +1,14 @@
 UserPage = React.createClass({
 	mixins: [ReactMeteorData],
 	getMeteorData() {
-		Meteor.subscribe("favorites");
 		Meteor.subscribe("scUsers");
+		Meteor.subscribe("favorites");
+		Meteor.subscribe("playlists");
+		console.log(parseInt(this.props.params.userID));
 		return {
 			user: SCUsersCollection.findOne({id: parseInt(this.props.params.userID)}),
 			favoriter: FavoritesCollection.findOne({id: parseInt(this.props.params.userID)}),
-			//Set to true once user toggles to playlists and they're loaded, only changed once
-			loadedPlaylists: false
+			playlisters: PlaylistsCollection.find({id: parseInt(this.props.params.userID)}).fetch()
 		};
 	},
 	getInitialState() {
@@ -21,18 +22,16 @@ UserPage = React.createClass({
 
 	//On toggle click
 	toggleFavoritesPlaylists(showFavorites) {
-		if (!showFavorites) {
-			//Get playlists
-		}
 		if (showFavorites !== this.state.showFavorites) {
 			//Otherwise we're already at the state we clicked for
 			this.setState({showFavorites});
 		};
 	},
 	render() {
+		console.log("userpage", this.data.playlisters);
 		const username = this.data.user ? this.data.user.username : "";
-		const favoritesCount = this.data.user ? this.data.user.public_favorites_count : "";
-		const playlistsCount = this.data.user ? this.data.user.playlist_count : "";
+		const favoritesCount = this.data.favoriter ? this.data.favoriter.favorites.length : "...";
+		const playlistsCount = this.data.playlisters ? this.data.playlisters.length : "...";
 		const showFavoritesLabel = "ui orange circular label"+ (this.state.showFavorites ? "" : " basic");
 		const showPlaylistsLabel = "ui orange circular label"+ (this.state.showFavorites ? " basic" : "");
 		return (
@@ -62,7 +61,7 @@ UserPage = React.createClass({
 						this.state.showFavorites ? 
 						<UserFavorites user={this.data.user} favoriter={this.data.favoriter} />
 						:
-						<UserPlaylists user={this.data.user} favoriter={this.data.user} /> 
+						<UserPlaylists user={this.data.user} playlisters={this.data.playlisters} /> 
 					}
 				</div>
 			</div>

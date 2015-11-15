@@ -24,6 +24,10 @@ Meteor.startup(() => {
 	Meteor.publish("favorites", () => {
 		return FavoritesCollection.find();
 	});
+	Meteor.publish("playlists", () => {
+		return PlaylistsCollection.find();
+	});
+	//Consider moving check Meteor.userId() (throws React key error if moving {likedBy: Meteor.userId() here})
 	Meteor.publish("likes", () => {
 		return LikesCollection.find();
 	})
@@ -41,15 +45,25 @@ Meteor.methods({
 	//On select of a user in /users, update info. result is data from two favorites+playlist SC API calls
 	updateUserOnSelect: function(userID, result) {
 		//soundcloud userID
-		console.log("update favorites", userID, favorites);
-		//Order of promises in UserCcard
+		// console.log("update favorites", userID, result);
+		//Order of promises in UserCard
 		let favorites = result[0];
-		let playlists = result[1];
 		FavoritesCollection.update({id: userID}, {
 			$set: {
 				favorites: favorites
 			}
 		}, {upsert:true});
+
+		let playlists = result[1];
+		playlists.forEach((playlist,index,arr) => {
+			console.log("playlist id: ", playlist.id); 
+			PlaylistsCollection.update({id: userID, "playlist.id": playlist.id}, {
+				$set : {
+					playlist: playlist
+				}
+			}, {upsert:true});
+		});
+		console.log(PlaylistsCollection.find({id: userID}).fetch().length, PlaylistsCollection.find({}).fetch().length);
 	},
 
 	//Player
