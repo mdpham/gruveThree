@@ -34,9 +34,13 @@ UserCard = React.createClass({
 	},
 	componentDidMount() {
 		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer").dimmer({on: "hover"});
-	},
-	componentDidUpdate() {
-		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer").dimmer({on: "hover"});
+		console.log($(ReactDOM.findDOMNode(this)).find(".fluid.image img.ui.image"));
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image img.ui.image")
+		  .visibility({
+		    type       : 'image',
+		    transition : 'vertical flip in',
+		    duration   : 1000
+		  })
 	},
 	render() {
 		let scData = this.props.sc;
@@ -68,7 +72,7 @@ UserCard = React.createClass({
 										</div>
 									</div>
 								</div>
-								<img className="ui image" src={prof_avatar}></img>
+								<img className="ui image" src="https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg" data-src={prof_avatar}></img>
 							</div>
 					</div>
 					<div className="ui select-dimmer dimmer">

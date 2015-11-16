@@ -5,8 +5,8 @@ TrackCard = React.createClass({
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
 		  .visibility({
 		    type       : 'image',
-		    transition : 'vertical flip in',
-		    duration   : 1024
+		    transition : 'scale in',
+		    duration   : 1000
 		  })
 	},
 	componentDidUpdate() {
