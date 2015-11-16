@@ -24,20 +24,18 @@ UserPage = React.createClass({
 	//On toggle click
 	toggleFavoritesPlaylists(showFavorites) {
 		//Move toggle icon toggling to UserFavorites UserPlaylists component
-		if (showFavorites !== this.state.showFavorites) {
+		// if (showFavorites !== this.state.showFavorites) {
 			//Otherwise we're already at the state we clicked for
-			this.setState({showFavorites});
+			// this.setState({showFavorites});
 			const tab = showFavorites ? "/favorites" : "/playlists";
 			this.history.pushState(null, "/app/users/"+this.data.user.id+tab);
-		};
+		// };
 	},
 	render() {
 		// console.log("userpage", this.data.playlisters);
 		const username = this.data.user ? this.data.user.username : "";
 		const favoritesCount = this.data.favoriter ? this.data.favoriter.favorites.length : "...";
 		const playlistsCount = this.data.playlisters ? this.data.playlisters.length : "...";
-		const showFavoritesLabel = "ui orange circular label"+ (this.state.showFavorites ? "" : " basic");
-		const showPlaylistsLabel = "ui orange circular label"+ (this.state.showFavorites ? " basic" : "");
 		return (
 			<div className="ui stackable grid container">
 				<div className="one column row">
@@ -46,11 +44,11 @@ UserPage = React.createClass({
 							<div className="ui huge header">
 								{username}
 								<div className="sub header">
-										<a onClick={this.toggleFavoritesPlaylists.bind(this, true)} className={showFavoritesLabel}>
+										<a id="toggleUserFavorites" onClick={this.toggleFavoritesPlaylists.bind(this, true)} className="ui basic orange circular label">
 											Favorites
 											<div className="detail">{favoritesCount}</div>
 										</a>
-										<a onClick={this.toggleFavoritesPlaylists.bind(this, false)} className={showPlaylistsLabel}>
+										<a id="toggleUserPlaylists" onClick={this.toggleFavoritesPlaylists.bind(this, false)} className="ui basic orange circular label">
 											Playlists
 											<div className="detail">{playlistsCount}</div>
 										</a>

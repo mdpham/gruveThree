@@ -43,6 +43,9 @@ UserFavorites = React.createClass({
 	},
 	componentDidMount() {
 		this.initSearch();
+		//Change toggle
+		$("#toggleUserFavorites").removeClass("basic");
+		$("#toggleUserPlaylists").addClass("basic");
 	},
 	componentDidUpdate() {
 		this.initSearch();

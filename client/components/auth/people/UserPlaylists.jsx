@@ -8,6 +8,11 @@ UserPlaylists = React.createClass({
 			playlister: PlaylistsCollection.find({id: parseInt(this.props.params.userID)}).fetch()
 		};
 	},
+	componentDidMount() {
+		$("#toggleUserPlaylists").removeClass("basic");
+		$("#toggleUserFavorites").addClass("basic");
+
+	},
 	renderSinglePlaylist(p) {
 		return (
 			<div>
@@ -24,7 +29,6 @@ UserPlaylists = React.createClass({
 	render() {
 		return (
 		<div>
-			{this.renderPlaylister()}
 		</div>);
 	}
 });
