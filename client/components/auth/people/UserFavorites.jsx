@@ -71,7 +71,7 @@ UserFavorites = React.createClass({
 					<div id="favorite-search" className="ui fluid search">
 						<div className="ui fluid icon input">
 						  <input className="prompt" type="text" placeholder={searchPlaceholder} />
-						  <i className="pink heart outline icon"></i>
+						  <i className="orange heart outline icon"></i>
 						</div>
 					  <div className="results"></div>
 					</div>

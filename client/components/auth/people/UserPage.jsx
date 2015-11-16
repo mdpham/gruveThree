@@ -23,6 +23,7 @@ UserPage = React.createClass({
 
 	//On toggle click
 	toggleFavoritesPlaylists(showFavorites) {
+		//Move toggle icon toggling to UserFavorites UserPlaylists component
 		if (showFavorites !== this.state.showFavorites) {
 			//Otherwise we're already at the state we clicked for
 			this.setState({showFavorites});

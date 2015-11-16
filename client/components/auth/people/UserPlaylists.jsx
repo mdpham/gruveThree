@@ -18,7 +18,7 @@ UserPlaylists = React.createClass({
 		console.log(this.data.playlister);
 		if (this.data.playlister === undefined) {return <NotFound />}
 		else {
-			return (this.data.playlister.map((p)=>{return renderSinglePlaylist(p)}))
+			return (this.data.playlister.map((p)=>{return this.renderSinglePlaylist(p)}))
 		};
 	},
 	render() {
