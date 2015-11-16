@@ -1,4 +1,4 @@
-const {Router, Route, IndexRoute, Link} = ReactRouter;
+const {Router, Route, IndexRoute, Link, Redirect} = ReactRouter;
 const history = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
 
 // Meteor.absoluteUrl({secure: true, replaceLocalhost: true});
@@ -19,7 +19,12 @@ Meteor.startup(()=>{
 		<Route path="/app" component={AuthApp}>
 			<IndexRoute component={Home} />
 			<Route path="users" component={Users} />
-			<Route path="users/:userID" component={UserPage} />
+			<Route path="users/:userID" component={UserPage}>
+				<Redirect from="users/:userID" to="users/:userID/" />
+				<Route path="favorites" component={UserFavorites} />
+				<Route path="playlists" component={UserPlaylists} />
+				<Route path="*" component={UserFavorites} />
+			</Route>
 		</Route>
 		<Route path="*" component={NotFound} />
 

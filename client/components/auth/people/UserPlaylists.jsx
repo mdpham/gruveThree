@@ -3,6 +3,6 @@ UserPlaylists = React.createClass({
 
 	render() {
 		// console.log("playlists", this.props.playlisters);
-		return (<div></div>);
+		return (<div>Playlists</div>);
 	}
 });

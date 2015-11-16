@@ -1,9 +1,22 @@
 TrackCard = React.createClass({
 	componentDidMount() {
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
+		console.log($(ReactDOM.findDOMNode(this)).find(".fluid.image img"))
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
+		  .visibility({
+		    type       : 'image',
+		    transition : 'vertical flip in',
+		    duration   : 1024
+		  })
 	},
 	componentDidUpdate() {
-		$(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
+		// $(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
+		// $(ReactDOM.findDOMNode(this)).find(".fluid.image img")
+		// 		  .visibility({
+		// 		    type       : 'image',
+		// 		    transition : 'fade in',
+		// 		    duration   : 1000
+		// 		  })
 	},
 	getDuration(ms) {
 		const d = new Date(ms);
@@ -63,7 +76,7 @@ TrackCard = React.createClass({
 
 								</div>
 							</div>
-							<img className="ui image" src={artwork_url}></img>
+							<img className="ui image" src="https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg" data-src={artwork_url}></img>
 						</div>
 				</div>
 			</div>

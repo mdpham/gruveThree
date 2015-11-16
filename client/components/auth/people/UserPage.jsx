@@ -1,5 +1,7 @@
+const {History} = ReactRouter;
+
 UserPage = React.createClass({
-	mixins: [ReactMeteorData],
+	mixins: [ReactMeteorData, History],
 	getMeteorData() {
 		Meteor.subscribe("scUsers");
 		Meteor.subscribe("favorites");
@@ -24,6 +26,8 @@ UserPage = React.createClass({
 		if (showFavorites !== this.state.showFavorites) {
 			//Otherwise we're already at the state we clicked for
 			this.setState({showFavorites});
+			const tab = showFavorites ? "/favorites" : "/playlists";
+			this.history.pushState(null, "/app/users/"+this.data.user.id+tab);
 		};
 	},
 	render() {
@@ -56,12 +60,13 @@ UserPage = React.createClass({
 				</div>
 
 				<div className="one column row">
-					{
+					{this.props.children}
+					{/*
 						this.state.showFavorites ? 
 						<UserFavorites user={this.data.user} favoriter={this.data.favoriter} />
 						:
 						<UserPlaylists user={this.data.user} playlisters={this.data.playlisters} /> 
-					}
+					*/}
 				</div>
 			</div>
 		);
