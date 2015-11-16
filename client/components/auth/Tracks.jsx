@@ -1,7 +1,6 @@
 TrackCard = React.createClass({
 	componentDidMount() {
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
-		console.log($(ReactDOM.findDOMNode(this)).find(".fluid.image img"))
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
 		  .visibility({
 		    type       : 'image',
@@ -60,6 +59,7 @@ TrackCard = React.createClass({
 				);
 				break;
 		};
+		const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
 		return(
 			<div className="four wide column">
 				<div className="track ui fluid card">
@@ -76,7 +76,7 @@ TrackCard = React.createClass({
 
 								</div>
 							</div>
-							<img className="ui image" src="https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg" data-src={artwork_url}></img>
+							<img className="ui image" src={blackImage} data-src={artwork_url}></img>
 						</div>
 				</div>
 			</div>

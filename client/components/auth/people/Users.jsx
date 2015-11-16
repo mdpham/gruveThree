@@ -34,8 +34,7 @@ UserCard = React.createClass({
 	},
 	componentDidMount() {
 		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer").dimmer({on: "hover"});
-		console.log($(ReactDOM.findDOMNode(this)).find(".fluid.image img.ui.image"));
-		$(ReactDOM.findDOMNode(this)).find(".fluid.image img.ui.image")
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
 		  .visibility({
 		    type       : 'image',
 		    transition : 'vertical flip in',
@@ -59,8 +58,8 @@ UserCard = React.createClass({
 			case 83824614: description = "ICE EU"; break;
 			default: description = "Fetching likes"; break;
 		};
+					const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
 		return(
-			
 			<div className="five wide column">
 				<div className="ui orange raised segment">
 					<div className="user ui fluid card">
@@ -72,7 +71,7 @@ UserCard = React.createClass({
 										</div>
 									</div>
 								</div>
-								<img className="ui image" src="https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg" data-src={prof_avatar}></img>
+								<img className="ui image" src={blackImage} data-src={prof_avatar}></img>
 							</div>
 					</div>
 					<div className="ui select-dimmer dimmer">
@@ -94,14 +93,6 @@ Users = React.createClass({
 			scUsers: SCUsersCollection.find({}).fetch()
 		};
 	},
-	// componentDidMount(){
-	// 	console.log('didMount', this.data);
-	// 	$("#userCards .user.card .fluid.image").dimmer({on: 'hover'});
-	// },
-	// componentDidUpdate() {
-	// 	console.log('didUpdate', this.data);
-	// 	$("#userCards .user.card .fluid.image").dimmer({on: 'hover'});
-	// },
 	renderUsers(){
 		console.log('scusers', this.data.scUsers);
 		return this.data.scUsers.map((user) => {return <UserCard key={user.id} sc={user} />})

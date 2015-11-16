@@ -1,3 +1,4 @@
+//Generalize search component?
 LikeSearch = React.createClass({
 	initSearch() {
     let searchSource = this.props.searchContent.map((like) => {return {
