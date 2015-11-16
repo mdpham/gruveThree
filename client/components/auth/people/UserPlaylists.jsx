@@ -1,4 +1,15 @@
+const {History} = ReactRouter;
+
 PlaylistCard = React.createClass({
+	mixins: [History],
+	goToPlaylistPage() {
+		//End artwork animation
+		const intervalID = $(ReactDOM.findDOMNode(this.refs.artwork)).data("intervalID");
+		Meteor.clearInterval(intervalID);
+		//Go to new page
+		const state = "/app/users/" + this.props.p.id + "/playlists/" +this.props.p.playlist.id;
+		this.history.pushState(null, state);
+	},
 	mouseEnter(e) {
 		e.preventDefault();
 		intervalID = Meteor.setInterval(()=>{
@@ -46,7 +57,9 @@ PlaylistCard = React.createClass({
 			      <div className="ui dimmer">
 			        <div className="content">
 			          <div className="center">
-			            <div className="ui big basic orange circular inverted icon button"><i className="inverted orange horizontal ellipsis icon"></i></div>
+			            <div className="ui big basic orange circular inverted icon button" onClick={this.goToPlaylistPage}>
+			            	<i className="inverted orange horizontal ellipsis icon"></i>
+			            </div>
 			          </div>
 			        </div>
 			      </div>

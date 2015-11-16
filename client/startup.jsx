@@ -23,6 +23,7 @@ Meteor.startup(()=>{
 				<Redirect from="users/:userID" to="users/:userID/" />
 				<Route path="favorites" component={UserFavorites} />
 				<Route path="playlists" component={UserPlaylists} />
+				<Route path="playlists/:playlistID" component={PlaylistPage} /> 
 				<Route path="*" component={UserFavorites} />
 			</Route>
 		</Route>

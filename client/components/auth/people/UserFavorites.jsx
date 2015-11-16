@@ -67,14 +67,14 @@ UserFavorites = React.createClass({
 	},
 
 	render() {
-		const searchPlaceholder = this.data.user ? (this.data.user.username)+"\'s Favorites" : "";
+		const searchPlaceholder = this.data.user ? (this.data.user.username)+"\'s Favorites" : "Loading Favorites";
 		return (
 			<div id="userFavoritesContainer" className="ui column centered stackable grid" style={{"marginBottom": "150px"}}>
 				<div className="seven wide column">
 					<div id="favorite-search" className="ui fluid search">
 						<div className="ui fluid icon input">
 						  <input className="prompt" type="text" placeholder={searchPlaceholder} />
-						  <i className="orange heart outline icon"></i>
+						  <i className="orange search icon"></i>
 						</div>
 					  <div className="results"></div>
 					</div>

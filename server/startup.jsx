@@ -113,8 +113,30 @@ Meteor.methods({
 					};
 				};
 				break;
+			//Playlist from a Soundcloud user
+			case "playlist":
+				let playlistID = streamType.id;
+				let p = PlaylistsCollection.findOne({"playlist.id": playlistID}); //may need to parseInt if not done clientside
+				let playlist = p.playlist;
+				console.log("upcoming playlist", p);
+				if (random) {
+					next = _.sample(playlist.tracks);
+				}
+				else {
+					const currentPosn = playlist.tracks.findIndex((e,i,a) => {
+						return e.id == currentTrack.id;
+					});
+					const nextPosn = currentPosn+1;
+					if (nextPosn == playlist.tracks.length) {
+						next = playlist.tracks[0];
+					}
+					else {
+						next = playlist.tracks[nextPosn];
+					};
+				};
+				break;
 		};
-		// console.log("return object", next);
+		console.log("upcomng return", next);
 		return next;
 	},
 
