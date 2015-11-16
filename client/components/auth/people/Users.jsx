@@ -33,7 +33,11 @@ UserCard = React.createClass({
 		
 	},
 	componentDidMount() {
-		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer").dimmer({on: "hover"});
+		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer")
+			.dimmer({
+				on: "hover",
+				transition: "drop"
+			});
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
 		  .visibility({
 		    type       : 'image',
@@ -58,7 +62,8 @@ UserCard = React.createClass({
 			case 83824614: description = "ICE EU"; break;
 			default: description = "Fetching likes"; break;
 		};
-					const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
+		const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
+		console.log("props", this.props, prof_avatar);
 		return(
 			<div className="five wide column">
 				<div className="ui orange raised segment">

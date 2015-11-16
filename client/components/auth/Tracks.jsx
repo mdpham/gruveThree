@@ -1,10 +1,15 @@
 TrackCard = React.createClass({
 	componentDidMount() {
-		$(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image")
+			.dimmer({
+				on: "hover",
+				duration: {show: 600, hide: 400},
+				transition: "vertical flip"
+			});
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
 		  .visibility({
 		    type       : 'image',
-		    transition : 'scale in',
+		    transition : 'vertical flip in',
 		    duration   : 1000
 		  })
 	},
