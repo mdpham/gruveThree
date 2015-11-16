@@ -28,19 +28,20 @@ LikeSearch = React.createClass({
         }
      });
 
+      //For adding into People
       $("#test-search")
         .search({
             fields: {title: "title", description: "description", results:"results"},
             apiSettings: {
-                url: "//api.soundcloud.com/tracks?q={query}&client_id=7b734feadab101a0d2aeea04f6cd02cc",
+                url: "//api.soundcloud.com/users?q={query}&client_id=7b734feadab101a0d2aeea04f6cd02cc",
                 onResponse(result) {
                     console.log("RESPONSE", result);
                     const response = {
                         results: Object.keys(result).map((k) => {
                         const t = result[k];
                         return {
-                            title: t.title,
-                            description: t.user.username
+                            title: t.username,
+                            description: t.id
                         };
                     })};
                     console.log(result);

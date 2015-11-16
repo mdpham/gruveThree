@@ -37,7 +37,7 @@ UserCard = React.createClass({
 		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
 		  .visibility({
 		    type       : 'image',
-		    transition : 'vertical flip in',
+		    transition : 'drop in',
 		    duration   : 1000
 		  })
 	},
@@ -102,7 +102,7 @@ Users = React.createClass({
 		return (
 			<div className="ui stackable grid container">
 				<div className="ui horizontal divider">People</div>
-				<div className="one column row">
+				<div className="one column row" style={{"marginBottom": "150px"}}>
 					<div id="userCards" className="ui column centered stackable grid">
 						{this.renderUsers()}
 					</div>

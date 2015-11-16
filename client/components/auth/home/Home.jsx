@@ -97,7 +97,7 @@ Home = React.createClass({
 					</div>
 				</div>
 				}
-				<div className="one column center aligned row">
+				<div className="one column center aligned row" style={{"marginBottom": "150px"}}>
 				<div id="profileTracks" className="ui fifteen wide column centered stackable grid container">
 					{this.renderTracks()}
 				</div>
