@@ -68,13 +68,13 @@ LikeSearch = React.createClass({
 			  <div className="results"></div>
 			</div>
 
-            <div id="test-search" className="ui fluid search">
+{/*            <div id="test-search" className="ui fluid search">
               <div className="ui fluid icon input">
                 <input className="prompt" type="text" placeholder="Test" />
                 <i className="search icon"></i>
               </div>
               <div className="results"></div>
-            </div>
+            </div>*/}
 
             </div>
 		);

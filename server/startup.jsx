@@ -14,7 +14,6 @@ Meteor.startup(() => {
 	prescribedUsers.forEach((scUserID)=>{
 		InfluencesCollection.update({scUserID:scUserID}, {scUserID:scUserID}, {upsert:true});
 	});
-	console.log("Influences: :", InfluencesCollection.find().fetch());
 	Meteor.publish("influences", () => {
 		return InfluencesCollection.find();
 	});
@@ -48,21 +47,26 @@ Meteor.methods({
 		// console.log("update favorites", userID, result);
 		//Order of promises in UserCard
 		let favorites = result[0];
-		FavoritesCollection.update({id: userID}, {
-			$set: {
-				favorites: favorites
-			}
-		}, {upsert:true});
+		if ((FavoritesCollection.findOne({id: userID}) === undefined) || favorites.length !== FavoritesCollection.findOne({id: userID}).favorites.length) {
+			console.log("change in favorites data, updating")
+			FavoritesCollection.update({id: userID}, {
+				$set: {
+					favorites: favorites
+				}
+			}, {upsert:true});			
+		} else {console.log("no change in favorites data")};
 
 		let playlists = result[1];
-		playlists.forEach((playlist,index,arr) => {
-			console.log("playlist id: ", playlist.id); 
-			PlaylistsCollection.update({id: userID, "playlist.id": playlist.id}, {
-				$set : {
-					playlist: playlist
-				}
-			}, {upsert:true});
-		});
+		if (playlists.length !== PlaylistsCollection.find({id: userID}).fetch().length) {
+			console.log("change in playlist data, updating")
+			playlists.forEach((playlist,index,arr) => {
+				PlaylistsCollection.update({id: userID, "playlist.id": playlist.id}, {
+					$set : {
+						playlist: playlist
+					}
+				}, {upsert:true});
+			})
+		} else {console.log("no change in playlists data")};
 		console.log(PlaylistsCollection.find({id: userID}).fetch().length, PlaylistsCollection.find({}).fetch().length);
 	},
 

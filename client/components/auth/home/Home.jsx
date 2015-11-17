@@ -6,17 +6,17 @@ Home = React.createClass({
 		Meteor.subscribe("likes");
 		return {
 			isAuthenticated: Meteor.userId() !== null,
-			currentUser: Meteor.user(),
+			userId: Meteor.userId(),
 			//Sort by most recent (descending)
 			likes: LikesCollection.find({likedBy: Meteor.userId()}, {sort: {likedAt: -1}}).fetch()
 		};
 	},
-	componentDidMount() {
-		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
-	},
-	componentDidUpdate() {
-		$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
-	},
+	// componentDidMount() {
+	// 	$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
+	// },
+	// componentDidUpdate() {
+	// 	$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
+	// },
 
 	renderTracks() {
 		if (!this.data.likes) {
@@ -82,11 +82,11 @@ Home = React.createClass({
 		};
 	},
 	render() {
-		if (!this.data.currentUser || !this.data.likes) {return <NotFound />}
+		if (!this.data.userId || !this.data.likes) {return <NotFound />}
 		console.log("likes: ", this.data.likes);
 		return (
 			<div className="ui stackable grid container">
-				<div className="ui fitted horizontal divider">Hey, {this.data.currentUser.username}</div>
+				<div className="ui fitted horizontal divider">Hey, {Meteor.user().username}</div>
 				{ this.data.likes.length == 0 ? "" :
 				<div className="row">
 					<div className="six wide column">

@@ -74,7 +74,7 @@ Player = React.createClass({
 		//Playback
 		const repeatIcon = this.state.repeat ? " loading " : "";
 		return (
-			<div id="player" className="ui big bottom fixed inverted menu">
+			<div id="player" className="ui bottom fixed inverted menu">
 				<div className="ui fluid stackable grid container">
 					<div className="middle aligned row">
 						<div className="center aligned two wide column">
