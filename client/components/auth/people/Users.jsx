@@ -72,7 +72,7 @@ UserCard = React.createClass({
 								<div className="ui hover-dimmer dimmer">
 									<div className="content">
 										<div className="center">
-											<div className="ui basic orange inverted button" onClick={this.goToUserPage.bind(this, scData.id)}>{username}</div>
+											<div className="ui basic orange inverted button circular" onClick={this.goToUserPage.bind(this, scData.id)}>{username}</div>
 										</div>
 									</div>
 								</div>
