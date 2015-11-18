@@ -1,10 +1,14 @@
 /* CSS declarations go here */
-#player-traveWave-container {
-	/*height: 100px;*/
-}
-#trackWave-background {
-	height: 100%;
+#trackWave {
+	opacity: 0.8;
 	width: 100%;
+	height: inherit;
+}
+#trackWave #trackWave-background {
+	height: 100%;
+	/*width: 100%;*/
+	width: inherit;
+	max-width: inherit;
 	background-color: white;
 	position: absolute;
 	z-index: 0;
@@ -13,30 +17,32 @@
 	height: 100%;
 	width: 0;
 	/*soundcloud orange*/
-	background-color: rgba(251,61,8,0.5); 
+	background-color: rgba(251,61,8,0.65); 
 	position: absolute;
 	z-index: 1;
 }
 #trackWave-seeking {
 	height: 100%;
-	width: 50%;
 	/*semanticui orange*/
-	background-color: rgba(239,75,8,0.5);
+	/*background-color: rgba(239,75,8,0.8);*/
+	background-color: rgba(0,0,0,0.5);
 	position: absolute;
-	z-index: 3;
+	z-index: 6;
 }
 #trackWave-playing {
 	height: 100%;
 	width: 0;
 	/*semanticui orange*/
-	background-color: rgba(239,75,8,0.75);
+	background-color: rgba(239,75,8,1);
 	position: absolute;
 	z-index: 4;
 }
 #trackWave-waveform {
 	height: 100%;
-	width: 100%;
-	background-color: #000000;
+	/*width: 100%;*/
+	width: inherit;
+	/*width: 50%;*/
+	background-color: rgba(0,0,0,1);
 	background-size: cover;
 	position: absolute;
 	z-index: 5;
@@ -56,7 +62,10 @@ div[class^='player-button'] {
 }
 
 /*Playlists*/
-/*.test {
-		background-image: url(https://i1.sndcdn.com/artworks-000109721509-k8fp3e-large.jpg), url(https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg) !important;
-    background-repeat: space, repeat;
-}*/
+#authNavBar, #player {
+	opacity: 0.95;
+}
+
+#authNavBar:hover, #player:hover {
+	opacity: 1;
+}
