@@ -82,7 +82,7 @@ Home = React.createClass({
 		};
 	},
 	render() {
-		if (!this.data.userId || !this.data.likes) {return <NotFound />}
+		if (!this.data.userId || !this.data.likes || !Meteor.user()) {return <NotFound />}
 		console.log("likes: ", this.data.likes);
 		return (
 			<div className="ui stackable grid container">
