@@ -1,22 +1,11 @@
 Waveform = React.createClass({
-	getInitialState(){
-		return {
-			// width: $("#trackWave").width()
-		};
-	},
 	componentDidMount(){
-		// console.log();
-		
-
+		// Manually set widths since Waveform component is set in .fluid.container so waveform divs with percentage width will take on this larger width and go off screen
 		const w = $("#trackWave").width();
-		// const h = $(ReactDOM.findDOMNode(this.refs.container)).height();
-		// console.log(w,h, this.state.width);
 		const waveform = ReactDOM.findDOMNode(this.refs.waveform);
 		const background = ReactDOM.findDOMNode(this.refs.background);
-
 		$([waveform, background]).width(w);
-		// $([waveform, background]).height(h);
-
+		// Hide until track is being played
 		$(ReactDOM.findDOMNode(this)).transition("hide");
 	},
 	mouseMove(e){
