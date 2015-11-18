@@ -27,7 +27,6 @@ TrackCard = React.createClass({
 		return d.getUTCMinutes() + ":" + (d.getUTCSeconds() < 10 ? '0'+d.getUTCSeconds() : d.getUTCSeconds());
 	},
 	selectTrack(trackData) {
-		console.log('testPly');
 		//streamtype is object {type: "favorites"|"user", _id: id in mongo db depending on type property}
 		soundManager.player.updateStreamType(this.props.streamType);
 		soundManager.player.select(trackData);

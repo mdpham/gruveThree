@@ -29,9 +29,7 @@ AuthApp = React.createClass({
 		return (
 			<div id="authApp">
 				<AuthNavBar />
-
 				<div id="authAppBody" style={{"marginTop": "100", "marginBottom": "100"}}>{this.props.children}</div>
-
 				<Player />
 			</div>
 		);

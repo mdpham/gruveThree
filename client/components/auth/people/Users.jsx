@@ -63,7 +63,7 @@ UserCard = React.createClass({
 			default: description = "Fetching likes"; break;
 		};
 		const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
-		console.log("props", this.props, prof_avatar);
+		// console.log("props", this.props, prof_avatar);
 		return(
 			<div className="five wide column">
 				<div className="ui orange raised segment">

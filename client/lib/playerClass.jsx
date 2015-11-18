@@ -74,8 +74,18 @@ class Player extends SoundManager {
 		//For access when liking
 		player.track = track;
 		//For playing previous tracks (filter somehow to not have duplicates)
-
 		return player;
+	}
+
+	//WAVEFORM
+	// p:=percentage [0,1]
+	updateWaveformPlaying(p){
+		const maxW = $("#trackWave-waveform").width();
+		$("#trackWave-playing").width(maxW*p);
+	}
+	updateWaveformLoading(p){
+		const maxW = $("#trackWave-waveform").width();
+		$("#trackWave-loading").width(maxW*p);
 	}
 	//STREAM
 	//Clicked on TrackCard
@@ -87,11 +97,9 @@ class Player extends SoundManager {
 	start(track){
 		//Do nothing if already playing current track
 		if (track == this.track) {console.log("ALREADY PLAYING");return;};
-		// let player = this;
-		// console.log("Player.play", stream, this,super);
-		const stream = track.stream_url+"?client_id=7b734feadab101a0d2aeea04f6cd02cc";
 		//Show player as loading
 		$(".player-dimmer").dimmer("show");
+		const stream = track.stream_url+"?client_id=7b734feadab101a0d2aeea04f6cd02cc";
 		const options = {
 			id: "current",
 			url: stream,
@@ -99,7 +107,7 @@ class Player extends SoundManager {
 			autoPlay: false,
 			onplay() {
 				player.updateWave(track).updateInfo(track).updateTrack(track);
-				$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
+				// $(".player-button-volumemute i, #player-show-volume i").removeClass("red");
 				$(".player-button-pause i").removeClass("play").addClass("pause")
 				$(".player-dimmer").dimmer("hide");
 			},
@@ -111,13 +119,16 @@ class Player extends SoundManager {
 				};
 				// console.log("played", this.position/this.durationEstimate);
 				//Update waveform
-				$("#trackWave-playing").css("width", 100*this.position/this.durationEstimate + "%");
-				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+				// $("#trackWave-playing").css("width", 100*this.position/this.durationEstimate + "%");
+				// $("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+				player.updateWaveformPlaying(this.position/this.durationEstimate);
+				player.updateWaveformLoading(this.bytesLoaded/this.bytesTotal);
 			},
 			whileloading() {
 				// console.log("loaded", this.bytesLoaded/this.bytesTotal);
 				// $("#trackWave-")
-				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+				// $("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+				player.updateWaveformLoading(this.bytesLoaded/this.bytesTotal);
 			},
 			onfinish() {
 				console.log("FINISHED PLAYING TRACK");
@@ -250,11 +261,12 @@ class Player extends SoundManager {
 	}
 
 	//WAVEFORM SEEKING
-	seek(percentage){
+	// p:=percentage of duration to seek to
+	seek(p){
 		let currentSound = player.sm.getSoundById("current");
-		// let seek = Math.min(percentage*currentSound.durationEstimate, currentSound.duration);
-		console.log(percentage, currentSound.durationEstimate, currentSound.duration);
-		// currentSound.setPosition(seek);
+		// posn in milliseconds to seek to
+		let seek = p*currentSound.durationEstimate;
+		currentSound.setPosition(seek);
 	}
 }
 

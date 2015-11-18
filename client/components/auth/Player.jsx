@@ -69,7 +69,6 @@ Player = React.createClass({
 	},
 	componentDidUpdate(){
 		let left = this.state.left === "" ? this.refs.leftMenu : (this.state.left === "volume" ? this.refs.leftVolume : this.refs.leftPlayback);
-		console.log('l', left);
 		$(ReactDOM.findDOMNode(left)).transition("vertical flip in");
 	},
 	toggleLeft(left) {
