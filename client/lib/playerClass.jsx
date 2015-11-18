@@ -54,9 +54,10 @@ class Player extends SoundManager {
 	updateWave(track){
 		$("#trackWave-waveform").css({
 			"-webkit-mask-box-image": "url("+track.waveform_url+")"
+			// width:
 		});
 		$("#trackWave-playing, #trackWave-loading").css("width", 0);
-		$("#trackWave").transition("show");
+		$("#trackWave").transition("vertical flip in");
 
 		//Ror chaining
 		return player;

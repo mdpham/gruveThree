@@ -4,11 +4,11 @@
 	width: 100%;
 	height: inherit;
 }
-#trackWave #trackWave-background {
+#trackWave-background {
 	height: 100%;
-	/*width: 100%;*/
-	width: inherit;
-	max-width: inherit;
+	width: 100%;
+	/*width: inherit;*/
+	/*max-width: inherit;*/
 	background-color: white;
 	position: absolute;
 	z-index: 0;
@@ -37,13 +37,12 @@
 	position: absolute;
 	z-index: 4;
 }
+/*Track waveform mask*/
 #trackWave-waveform {
 	height: 100%;
-	/*width: 100%;*/
-	width: inherit;
-	/*width: 50%;*/
+	width: 100%;
 	background-color: rgba(0,0,0,1);
-	background-size: cover;
+	background-size: contain;
 	position: absolute;
 	z-index: 5;
 }

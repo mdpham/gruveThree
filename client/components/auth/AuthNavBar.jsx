@@ -23,7 +23,7 @@ AuthNavBar = React.createClass({
 	},
 	render() {
 		return (
-			<div id="authNavBar" className="ui inverted top fixed menu">
+			<div className="ui inverted top fixed menu">
 				<div className="ui fluid container">
 						<div className="ui simple dropdown item">
 					    <div className="middle aligned content">
