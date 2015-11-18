@@ -95,7 +95,7 @@ class Player extends SoundManager {
 			id: "current",
 			url: stream,
 			volume: player.volume,
-			autoPlay: true,
+			autoPlay: false,
 			onplay() {
 				player.updateWave(track).updateInfo(track).updateTrack(track);
 				$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
@@ -115,6 +115,7 @@ class Player extends SoundManager {
 			},
 			whileloading() {
 				// console.log("loaded", this.bytesLoaded/this.bytesTotal);
+				// $("#trackWave-")
 				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
 			},
 			onfinish() {
@@ -122,8 +123,20 @@ class Player extends SoundManager {
 				player.next();
 			}
 		};
-		player.sm.destroySound("current");
-		player.sm.createSound(options);
+
+		if (player.sm.getSoundById("current") === undefined){
+			player.sm.destroySound("current");
+			player.sm.createSound(options).play();
+		} else {
+				if (player.sm.getSoundById("current").muted){
+					player.sm.destroySound("current");
+					player.sm.createSound(options).play().mute();	
+				} else {
+					player.sm.destroySound("current");
+					player.sm.createSound(options).play();	
+				};
+		};
+		
 	}
 	//STOP
 	stop(){
@@ -233,6 +246,14 @@ class Player extends SoundManager {
 			player.queue.posn -= 1;
 			player.start(player.queue.history[player.queue.posn]);
 		};
+	}
+
+	//WAVEFORM SEEKING
+	seek(percentage){
+		let currentSound = player.sm.getSoundById("current");
+		// let seek = Math.min(percentage*currentSound.durationEstimate, currentSound.duration);
+		console.log(percentage, currentSound.durationEstimate, currentSound.duration);
+		// currentSound.setPosition(seek);
 	}
 }
 
