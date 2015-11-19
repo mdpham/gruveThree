@@ -17,7 +17,7 @@ class SoundManager {
 		});
 		this.sm = soundManager;
 	}
-}
+};
 
 class Player extends SoundManager {
 	constructor(){
@@ -46,7 +46,20 @@ class Player extends SoundManager {
 		player = this;
 	}
 
-	//Start playing new current track
+	//WAVEFORM (method declaration above where they will be called)
+	// p:=percentage [0,1]
+	updateWaveformPlaying(p){
+		const maxW = $("#trackWave-waveform").width();
+		$("#trackWave-playing").width(maxW*p);
+		return player;
+	}
+	updateWaveformLoading(p){
+		const maxW = $("#trackWave-waveform").width();
+		$("#trackWave-loading").width(maxW*p);
+		return player;
+	}
+
+	//FOR NEW TRACK
 	updateStreamType(type){
 		console.log("updating stream type", type);
 		player.streamType = type;
@@ -55,10 +68,9 @@ class Player extends SoundManager {
 		$("#trackWave-waveform").css({
 			"-webkit-mask-box-image": "url("+track.waveform_url+")"
 		});
-		$("#trackWave-playing, #trackWave-loading").css("width", 0);
-		$("#trackWave").transition("show");
-
-		//Ror chaining
+		player.updateWaveformLoading(0).updateWaveformPlaying(0);
+		$("#trackWave").transition("vertical flip in");
+		//For chaining
 		return player;
 	}
 	updateInfo(track){
@@ -73,66 +85,65 @@ class Player extends SoundManager {
 		//For access when liking
 		player.track = track;
 		//For playing previous tracks (filter somehow to not have duplicates)
-
 		return player;
 	}
+
 	//STREAM
 	//Clicked on TrackCard
 	select(track){
-		console.log("queue", player.queue);
+		// console.log("queue", player.queue);
 		player.queue.history.push(track);
 		player.queue.posn = player.queue.history.length-1;
 	}
 	start(track){
-		//Do nothing if already playing current track
-		if (track == this.track) {console.log("ALREADY PLAYING");return;};
-		// let player = this;
-		// console.log("Player.play", stream, this,super);
-		const stream = track.stream_url+"?client_id=7b734feadab101a0d2aeea04f6cd02cc";
-		//Show player as loading
+		// Do nothing if already playing current track
+		if (track == this.track) { console.log("ALREADY PLAYING");return; };
+		// Show player as loading
 		$(".player-dimmer").dimmer("show");
+		// Create Sound
+		const stream = track.stream_url+"?client_id=7b734feadab101a0d2aeea04f6cd02cc";
 		const options = {
-			id: "current",
-			url: stream,
-			volume: player.volume,
-			autoPlay: true,
-			onplay() {
+			id: "current", url: stream, volume: player.volume, autoPlay: false,
+			onplay(){
 				player.updateWave(track).updateInfo(track).updateTrack(track);
-				$(".player-button-volumemute i").removeClass("red");
-				$(".player-button-pause i").removeClass("play").addClass("pause")
+
+				$(".player-button-pause i").removeClass("play").addClass("pause");
 				$(".player-dimmer").dimmer("hide");
 			},
-			whileplaying() {
+			whileplaying(){
 				//Keep track of volume, volume property updated in Player class will update here
-				if (this.volume !== player.volume) {
-					console.log("diff volume", this.volume, player.volume);
-					this.setVolume(player.volume);
-				};
-				// console.log("played", this.position/this.durationEstimate);
+				if (this.volume !== player.volume) { this.setVolume(player.volume); };
 				//Update waveform
-				$("#trackWave-playing").css("width", 100*this.position/this.durationEstimate + "%");
-				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+				player
+					.updateWaveformPlaying(this.position/this.durationEstimate)
+					.updateWaveformLoading(this.bytesLoaded/this.bytesTotal);
 			},
-			whileloading() {
-				// console.log("loaded", this.bytesLoaded/this.bytesTotal);
-				$("#trackWave-loading").css("width", 100*this.bytesLoaded/this.bytesTotal + "%");
+			whileloading(){
+				player.updateWaveformLoading(this.bytesLoaded/this.bytesTotal);
 			},
-			onfinish() {
-				console.log("FINISHED PLAYING TRACK");
+			onfinish(){
 				player.next();
 			}
 		};
-		player.sm.destroySound("current");
-		player.sm.createSound(options);
+
+		// Check mute status before playing
+		if ((player.sm.getSoundById("current") === undefined) || !player.sm.getSoundById("current").muted){
+			player.sm.destroySound("current");
+			player.sm.createSound(options).play();
+		} else if (player.sm.getSoundById("current").muted) {
+			player.sm.destroySound("current");
+			player.sm.createSound(options).play().mute();	
+		};
 	}
+
 	//STOP
 	stop(){
 		player.sm.stop("current");
 		//Reset waveform and pause putton
 		$("#trackWave-playing").css("width", 0);
 		$(".player-button-pause i").removeClass("pause").addClass("play");
-
 	}
+
 	//PAUSE
 	pause(){
 		player.sm.togglePause("current");
@@ -144,9 +155,9 @@ class Player extends SoundManager {
 		};
 		//Include for playing after mute,stop,play
 		if (player.sm.getSoundById("current").muted) {
-			$(".player-button-volumemute i").addClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").addClass("red");
 		} else {
-			$(".player-button-volumemute i").removeClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
 		};
 		// return player.sm.getSoundById("current").paused;
 	}
@@ -157,9 +168,9 @@ class Player extends SoundManager {
 	mute(){
 		player.sm.toggleMute("current");
 		if (player.sm.getSoundById("current").muted) {
-			$(".player-button-volumemute i").addClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").addClass("red");
 		} else {
-			$(".player-button-volumemute i").removeClass("red");
+			$(".player-button-volumemute i, #player-show-volume i").removeClass("red");
 		};
 		// return player.sm.getSoundById("current").muted;
 	}
@@ -234,6 +245,15 @@ class Player extends SoundManager {
 			player.start(player.queue.history[player.queue.posn]);
 		};
 	}
-}
+
+	//WAVEFORM SEEKING
+	// p:=percentage of duration to seek to
+	seek(p){
+		let currentSound = player.sm.getSoundById("current");
+		// posn in milliseconds to seek to
+		let seek = p*currentSound.durationEstimate;
+		currentSound.setPosition(seek);
+	}
+};
 
 soundManager.player = new Player();

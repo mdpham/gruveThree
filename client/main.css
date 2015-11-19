@@ -1,10 +1,14 @@
 /* CSS declarations go here */
-#player-traveWave-container {
-	/*height: 100px;*/
+#trackWave {
+	opacity: 0.8;
+	width: 100%;
+	height: inherit;
 }
 #trackWave-background {
 	height: 100%;
-	width: 100%;
+	max-width: 100%;
+	/*width: inherit;*/
+	/*max-width: inherit;*/
 	background-color: white;
 	position: absolute;
 	z-index: 0;
@@ -13,31 +17,34 @@
 	height: 100%;
 	width: 0;
 	/*soundcloud orange*/
-	background-color: rgba(251,61,8,0.5); 
+	background-color: rgba(251,61,8,0.25); 
 	position: absolute;
 	z-index: 1;
 }
 #trackWave-seeking {
 	height: 100%;
-	width: 50%;
+	width: 0;
 	/*semanticui orange*/
-	background-color: rgba(239,75,8,0.5);
+	/*background-color: rgba(239,75,8,0.8);*/
+	background-color: rgba(0,0,0,0.2);
 	position: absolute;
-	z-index: 3;
+	z-index: 6;
 }
 #trackWave-playing {
 	height: 100%;
 	width: 0;
 	/*semanticui orange*/
-	background-color: rgba(239,75,8,0.75);
+	background-color: rgba(291,91,0,1);
+  border-right: thick solid white;
 	position: absolute;
 	z-index: 4;
 }
+/*Track waveform mask*/
 #trackWave-waveform {
 	height: 100%;
-	width: 100%;
-	background-color: #000000;
-	background-size: cover;
+	max-width: 100%;
+	background-color: rgba(0,0,0,1);
+	background-size: contain;
 	position: absolute;
 	z-index: 5;
 }

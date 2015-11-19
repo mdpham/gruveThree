@@ -1,16 +1,37 @@
 TrackCard = React.createClass({
 	componentDidMount() {
-		$(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
-	},
-	componentDidUpdate() {
-		$(ReactDOM.findDOMNode(this)).find(".fluid.image").dimmer({on: "hover"});
+		// Hover over to select
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image")
+			.dimmer({
+				on: "hover",
+				duration: {show: 600, hide: 400},
+				transition: "horizontal flip"
+			});
+		// Lazy loading for track artwork
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
+		  .visibility({
+		    type       : 'image',
+		    transition : 'scale in',
+		    duration   : 1000
+		  });
+		// Popup for track info
+		$(ReactDOM.findDOMNode(this)).find(".track.card")
+			.popup({
+				on: 'hover',
+				title: this.props.scData.user.username,
+				content: this.props.scData.title,
+				target: $(ReactDOM.findDOMNode(this)).find(".fluid.image img"),
+				position: "top center",
+				transition: "horizontal flip",
+				hideOnScroll: false
+			});
+
 	},
 	getDuration(ms) {
 		const d = new Date(ms);
 		return d.getUTCMinutes() + ":" + (d.getUTCSeconds() < 10 ? '0'+d.getUTCSeconds() : d.getUTCSeconds());
 	},
 	selectTrack(trackData) {
-		console.log('testPly');
 		//streamtype is object {type: "favorites"|"user", _id: id in mongo db depending on type property}
 		soundManager.player.updateStreamType(this.props.streamType);
 		soundManager.player.select(trackData);
@@ -47,9 +68,10 @@ TrackCard = React.createClass({
 				);
 				break;
 		};
+		const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
 		return(
 			<div className="four wide column">
-				<div className="track ui fluid card">
+				<div className="track ui fluid card" data-variation="inverted">
 						<div className="ui fluid image">
 							<div className="ui dimmer">
 								<div className="content">
@@ -63,7 +85,7 @@ TrackCard = React.createClass({
 
 								</div>
 							</div>
-							<img className="ui image" src={artwork_url}></img>
+							<img className="ui image" src={blackImage} data-src={artwork_url}></img>
 						</div>
 				</div>
 			</div>

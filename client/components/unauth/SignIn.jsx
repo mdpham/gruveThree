@@ -27,7 +27,29 @@ SignInForm = React.createClass({
   },
   componentDidMount() {
     if (this.state.register) {$(".passwordConfirmField").transition({animation: "slide down"}).transition("show");}
-    else {$(".passwordConfirmField").transition({animation: "slide down"}).transition("hide");};    
+    else {$(".passwordConfirmField").transition({animation: "slide down"}).transition("hide");};
+    //Sign up warnings
+    const signUpInputs = [this.refs.username, this.refs.password, this.refs.passwordConfirm];
+    $(signUpInputs).popup({
+      on: "manual",
+      position: "top center",
+      duration: 1250,
+      onVisible() {
+        $(signUpInputs).popup("hide");
+      }
+    });
+    //Sign in warning
+    const submitButton = this.refs.submitButton;
+    $(submitButton).popup({
+      on: "manual",
+      position: "top center",
+      duration: 1250,
+      popup: "#signInErrorPopup",
+      onVisible() {
+        $(submitButton).popup("hide");
+      }
+    })
+    
   },
   componentDidUpdate() {
     if (this.state.register) {$(".passwordConfirmField").transition({animation: "slide down"}).transition("show");}
@@ -35,6 +57,7 @@ SignInForm = React.createClass({
   },
   registerStateToggle(e) {
     e.preventDefault();
+    $(".usernameField, .passwordField, .passwordConfirmField").removeClass("error");
     this.setState({register: !this.state.register});
   },
   //
@@ -50,13 +73,18 @@ SignInForm = React.createClass({
   },
   submitSignIn(creds){
     console.log(creds);
+    $(".usernameField, .passwordField").removeClass("error");
     Meteor.loginWithPassword(creds.username, creds.password, (error) => {
-        if (error !== undefined) {console.log("loginWithPassword:", error)}
-        else {
+        if (error === undefined) {
           //Load and update database, then log in
           console.log("fetching from influences", this.data.influences);
-          this.fetchFromSoundcloud(this.data.influences);
-          // this.history.pushState(null, "/app");
+          this.fetchFromSoundcloud(this.data.influences);          
+        }
+        else {
+          console.log("loginWithPassword:", error);
+          $("#signInErrorPopup").text(error.reason);
+          $(".usernameField, .passwordField").addClass("error");
+          $(this.refs.submitButton).popup("show");
         };
     });
   },
@@ -64,19 +92,48 @@ SignInForm = React.createClass({
     console.log(creds);
     // let profile = {likes: []};
     //CHECK STRINGS
-    Accounts.createUser(creds,
-      (error) => {
-        if (error !== undefined) {console.log("createUser:", error)}
-        else {
-          console.log("account created, log in", creds);
-          let username = creds.username;
-          let password = creds.password;
-          Meteor.loginWithPassword({username}, password, (error) => {
-            if (error !== undefined) {console.log("loginWithPassword", error);}
-            else {this.history.pushState(null, "/app");};
+    //Alphanumeric 
+    const alphanumeric = /^([a-zA-Z0-9-_])+$/;
+    if (alphanumeric.test(creds.username)) {
+      $(".usernameField").removeClass("error");
+      if (alphanumeric.test(creds.password)) {
+        $(".passwordField").removeClass("error");
+        if (creds.password === creds.passwordConfirm) {
+          $(".passwordConfirmField").removeClass("error");
+          Accounts.createUser(creds,
+            (error) => {
+              if (error !== undefined) {console.log("createUser:", error)}
+              else {
+                console.log("account created, log in", creds);
+                const username = creds.username;
+                const password = creds.password;
+                Meteor.loginWithPassword({username}, password, (error) => {
+                  if (error !== undefined) {console.log("loginWithPassword", error);}
+                  else {this.history.pushState(null, "/app");};
+                });
+              };
           });
-        };
-    });
+        }
+        else {
+        //Password mismatch
+          console.log("passwords don't match", creds.password, creds.passwordConfirm);
+          $(this.refs.passwordConfirm).popup("show");
+          $(".passwordConfirmField").addClass("error");
+        }
+      }
+      else {
+        //Non alphanumeric password
+        console.log("non alphanum password", creds.password);
+        $(this.refs.password).popup("show");
+        $(".passwordField").addClass("error");
+      }
+    }
+    else {
+    //Non alphanumeric
+      console.log("non alphanumeric username", creds.username);
+      $(this.refs.username).popup("show");
+      $(".usernameField").addClass("error");
+    };
   },
   submitForm(e) {
     e.preventDefault();
@@ -91,6 +148,21 @@ SignInForm = React.createClass({
       this.submitSignIn({username, password});
     };
   },
+  //For continuing as a guest, no need to register and sign in
+  guestSignIn(e){
+    e.preventDefault();
+    console.log("log in as guest");
+    Meteor.loginWithPassword("Guest", "password", (error) => {
+        if (error !== undefined) {console.log("loginWithPassword:", error)}
+        else {
+          //Load and update database, then log in
+          // console.log("fetching from influences", this.data.influences);
+          this.fetchFromSoundcloud(this.data.influences);
+          this.history.pushState(null, "/app");
+        };
+    });
+
+  },
   //For when user is already logged in (i.e. after refreshing or by url)
   continueAsLoggedIn() {this.history.pushState(null, "/app");},
   continueByLoggingOut() {Meteor.logout(Meteor.logoutOtherClients);},
@@ -100,7 +172,7 @@ SignInForm = React.createClass({
     const submitButtonText = this.state.register ? "Sign Up" : "Sign In";
     const registerButtonText = this.state.register ? "Back" : "Register";
     return (
-      <div className="ui inverted segment">
+      <div className="ui inverted orange segment">
       { this.data.currentUser ?
         <div className="ui two big fluid basic inverted buttons">
           <div className="ui button" onClick={this.continueByLoggingOut}>Sign Out</div>
@@ -108,12 +180,19 @@ SignInForm = React.createClass({
         </div>
         :
         <form id="signInForm" className="ui equal width inverted form" onSubmit={this.submitForm}>
-          <div className="field"><input type="text" ref="username" placeholder="Username" /></div>
-          <div className="field"><input type="password" ref="password" placeholder="Password" /></div>
-          <div className="passwordConfirmField field"><input type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
+          {/* GUEST, public account */}
+          <div className="field">
+            <div className="ui fluid inverted button" onClick={this.guestSignIn}>Sign in as Guest</div>
+          </div>
+          <div className="ui horizontal divider">or</div>
+          {/* ACCOUNTS */}
+          <div className="usernameField field"><input data-content="Username must be alphanumeric" type="text" ref="username" placeholder="Username" /></div>
+          <div className="passwordField field"><input data-content="Password must be alphanumeric" type="password" ref="password" placeholder="Password" /></div>
+          <div className="passwordConfirmField field"><input data-content="Passwords must match" type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
           {/*Sign In or Register*/}
           <div className="field">
-            <button className="ui fluid inverted button" type="submit">{submitButtonText}</button>
+            <button ref="submitButton" className="ui fluid inverted button" type="submit">{submitButtonText}</button>
+            <div id="signInErrorPopup" className="ui popup">error</div>
           </div>
           <div className="registerButton field">
             <div className="ui fluid basic inverted button" onClick={this.registerStateToggle}>{registerButtonText}</div>
@@ -129,20 +208,15 @@ SignIn = React.createClass({
   openInfoModal() {
     $("#info-modal")
       .modal({
-        onApprove() {
-          console.log("log in as guest");
-          Meteor.loginWithPassword("Guest", "password", (error) => {
-              if (error !== undefined) {console.log("loginWithPassword:", error)}
-              else {
-                //Load and update database, then log in
-                // console.log("fetching from influences", this.data.influences);
-                // this.fetchFromSoundcloud(this.data.influences);
-                // this.history.pushState(null, "/app");
-              };
-          });
+        onApprove(){
+          $("#reflection-modal").modal("show");
         }
       })
       .modal("show");
+  },
+  openReflectionModal(){
+    console.log('rm');
+    
   },
   render() {
     return (
@@ -162,8 +236,9 @@ SignIn = React.createClass({
         </div>
         <div className="one column row">
           <div className="center aligned column">
-            <div className="ui huge orange basic inverted circular icon button" onClick={this.openInfoModal}><i className="orange inverted big info icon"></i></div>
-            <InfoModal />
+            <div className="ui huge orange circular icon button" onClick={this.openInfoModal}><i className="inverted big info icon"></i></div>
+            <InfoModal openRM={this.openReflectionModal}/>
+            <ReflectionModal />
           </div>
         </div>
     	</div>

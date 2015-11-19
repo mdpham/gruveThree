@@ -8,25 +8,42 @@ UserCard = React.createClass({
 		$(".select-dimmer").dimmer("hide"); //Hide all loading if new user selected
 		let loader = $(ReactDOM.findDOMNode(this)).find(".select-dimmer");
 		loader.dimmer("show");
-		SC.get("/users/"+userID+"/favorites", {limit: 100})
-			.then((favorites) => {
-				// console.log(favorites);
-				Meteor.call("updateFavorites", userID, favorites, (error, result) => {
+		//Get favorite tracks and playlists
+		let promiseFavorites = SC.get("/users/"+userID+"/favorites", {limit: 500});
+		let promisePlaylists = SC.get("/users/"+userID+"/playlists");
+
+		Promise.all([promiseFavorites, promisePlaylists])
+			.then((result) => {
+				console.log("all promises", result);
+				Meteor.call("updateUserOnSelect", userID, result, (error, result) => {
+					console.log("updateUserOnSelect", error, result);
 					loader.dimmer("hide");
-					this.history.pushState(null, "/app/users/"+userID)
+					this.history.pushState(null, "/app/users/"+userID+"/favorites");
 				});
 			});
-			// .then((favorites)=>{
-			// 	console.log(favorites);
-			// 	this.history.pushState(null, "/app/users/"+userID)
-			// }); 
+		// SC.get("/users/"+userID+"/favorites", {limit: 100})
+		// 	.then((favorites) => {
+		// 		// console.log(favorites);
+
+		// 	});
+		// 	// .then((favorites)=>{
+		// 	// 	console.log(favorites);
+		// 	// 	this.history.pushState(null, "/app/users/"+userID)
+		// 	// }); 
 		
 	},
 	componentDidMount() {
-		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer").dimmer({on: "hover"});
-	},
-	componentDidUpdate() {
-		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer").dimmer({on: "hover"});
+		$(ReactDOM.findDOMNode(this)).find(".hover-dimmer")
+			.dimmer({
+				on: "hover",
+				transition: "drop"
+			});
+		$(ReactDOM.findDOMNode(this)).find(".fluid.image img")
+		  .visibility({
+		    type       : 'image',
+		    transition : 'drop in',
+		    duration   : 1000
+		  })
 	},
 	render() {
 		let scData = this.props.sc;
@@ -42,22 +59,24 @@ UserCard = React.createClass({
 			case 79933909: description = "one of three"; break;
 			case 135282929: description = "juuuuan"; break;
 			case 86950103: description = "red bull"; break;
+			case 83824614: description = "ICE EU"; break;
 			default: description = "Fetching likes"; break;
 		};
+		const blackImage = "https://i1.sndcdn.com/avatars-000062332227-4nq69b-t500x500.jpg";
+		// console.log("props", this.props, prof_avatar);
 		return(
-			
 			<div className="five wide column">
-				<div className="ui hidden segment">
+				<div className="ui orange raised segment">
 					<div className="user ui fluid card">
 							<div className="ui fluid image">
 								<div className="ui hover-dimmer dimmer">
 									<div className="content">
 										<div className="center">
-											<div className="ui basic orange inverted button" onClick={this.goToUserPage.bind(this, scData.id)}>{username}</div>
+											<div className="ui basic orange inverted button circular" onClick={this.goToUserPage.bind(this, scData.id)}>{username}</div>
 										</div>
 									</div>
 								</div>
-								<img className="ui image" src={prof_avatar}></img>
+								<img className="ui image" src={blackImage} data-src={prof_avatar}></img>
 							</div>
 					</div>
 					<div className="ui select-dimmer dimmer">
@@ -79,14 +98,6 @@ Users = React.createClass({
 			scUsers: SCUsersCollection.find({}).fetch()
 		};
 	},
-	// componentDidMount(){
-	// 	console.log('didMount', this.data);
-	// 	$("#userCards .user.card .fluid.image").dimmer({on: 'hover'});
-	// },
-	// componentDidUpdate() {
-	// 	console.log('didUpdate', this.data);
-	// 	$("#userCards .user.card .fluid.image").dimmer({on: 'hover'});
-	// },
 	renderUsers(){
 		console.log('scusers', this.data.scUsers);
 		return this.data.scUsers.map((user) => {return <UserCard key={user.id} sc={user} />})
@@ -96,7 +107,7 @@ Users = React.createClass({
 		return (
 			<div className="ui stackable grid container">
 				<div className="ui horizontal divider">People</div>
-				<div className="one column row">
+				<div className="one column row" style={{"marginBottom": "150px"}}>
 					<div id="userCards" className="ui column centered stackable grid">
 						{this.renderUsers()}
 					</div>

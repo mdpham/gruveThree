@@ -11,6 +11,10 @@ class Liker {
 		Meteor.call("likeTrack", track, 
 			(error, result) => {
 				console.log(error, result);
+				if (error === undefined) {
+					$("#like-notification").text("Liked!");
+					$("#gruve-three-dropdown").popup("show");
+				};
 		});
 	}
 	//UNLIKE
@@ -19,6 +23,10 @@ class Liker {
 		Meteor.call("unlikeTrack", track,
 			(error, result) => {
 				console.log(error, result)
+				if (error === undefined) {
+					$("#like-notification").text("Unliked!");
+					$("#gruve-three-dropdown").popup("show");
+				};
 		});
 	}
 }
