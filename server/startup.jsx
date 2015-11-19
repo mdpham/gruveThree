@@ -43,7 +43,7 @@ Meteor.methods({
 	},
 	//On select of a user in /users, update info. result is data from two favorites+playlist SC API calls
 	updateUserOnSelect: function(userID, result) {
-		//soundcloud userID
+		//userId:=soundcloud userID
 		// console.log("update favorites", userID, result);
 		//Order of promises in UserCard
 		let favorites = result[0];
@@ -67,7 +67,7 @@ Meteor.methods({
 				}, {upsert:true});
 			})
 		} else {console.log("no change in playlists data")};
-		console.log(PlaylistsCollection.find({id: userID}).fetch().length, PlaylistsCollection.find({}).fetch().length);
+		// console.log(PlaylistsCollection.find({id: userID}).fetch().length, PlaylistsCollection.find({}).fetch().length);
 	},
 
 	//Player
