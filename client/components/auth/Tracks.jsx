@@ -23,7 +23,8 @@ TrackCard = React.createClass({
 				target: $(ReactDOM.findDOMNode(this)).find(".fluid.image img"),
 				position: "top center",
 				transition: "horizontal flip",
-				hideOnScroll: false
+				hideOnScroll: false,
+				hoverable: true
 			});
 
 	},
