@@ -11,13 +11,6 @@ Home = React.createClass({
 			likes: LikesCollection.find({likedBy: Meteor.userId()}, {sort: {likedAt: -1}}).fetch()
 		};
 	},
-	// componentDidMount() {
-	// 	$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
-	// },
-	// componentDidUpdate() {
-	// 	$("#profileTracks .track.card .fluid.image").dimmer({on: 'hover'});
-	// },
-
 	renderTracks() {
 		if (!this.data.likes) {
 			return (<div>Go get some likes</div>);
@@ -48,10 +41,6 @@ Home = React.createClass({
 				let accumulator = [{weekOf: current.format("WW YYYY"), likes:[]}];
 				let likesByWeek = this.data.likes.reduce((acc, like, index, array) => {
 					//likes will be sorted by latest descending
-					// if (current.isoWeek() != moment(like.likedAt).add(index,"w").isoWeek()) {
-					// 	//New week (update current week?);
-					// 	acc.push({weekOf: moment(like.likedAt).add(index,"w").format("WW YYYY"), likes:[like]});
-					// }
 					if (current.isoWeek() != moment(like.likedAt).isoWeek()) {
 						acc.push({weekOf: moment(like.likedAt).format("WW YYYY"), likes:[like]});
 					}
@@ -93,7 +82,7 @@ Home = React.createClass({
 						<LikeSearch searchContent={this.data.likes} />
 					</div>
 					<div className="ten wide column">
-						<Bubble />
+						<MostLiked />
 					</div>
 				</div>
 				}

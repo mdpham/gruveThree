@@ -1,4 +1,4 @@
-Bubble = React.createClass({
+MostLiked = React.createClass({
 	mixins: [ReactMeteorData],
 	getMeteorData() {
 		Meteor.subscribe("users");
