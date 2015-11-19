@@ -148,6 +148,21 @@ SignInForm = React.createClass({
       this.submitSignIn({username, password});
     };
   },
+  //For continuing as a guest, no need to register and sign in
+  guestSignIn(e){
+    e.preventDefault();
+    console.log("log in as guest");
+    Meteor.loginWithPassword("Guest", "password", (error) => {
+        if (error !== undefined) {console.log("loginWithPassword:", error)}
+        else {
+          //Load and update database, then log in
+          // console.log("fetching from influences", this.data.influences);
+          this.fetchFromSoundcloud(this.data.influences);
+          this.history.pushState(null, "/app");
+        };
+    });
+
+  },
   //For when user is already logged in (i.e. after refreshing or by url)
   continueAsLoggedIn() {this.history.pushState(null, "/app");},
   continueByLoggingOut() {Meteor.logout(Meteor.logoutOtherClients);},
@@ -165,6 +180,12 @@ SignInForm = React.createClass({
         </div>
         :
         <form id="signInForm" className="ui equal width inverted form" onSubmit={this.submitForm}>
+          {/* GUEST, public account */}
+          <div className="field">
+            <div className="ui fluid inverted button" onClick={this.guestSignIn}>Sign in as Guest</div>
+          </div>
+          <div className="ui horizontal divider">or</div>
+          {/* ACCOUNTS */}
           <div className="usernameField field"><input data-content="Username must be alphanumeric" type="text" ref="username" placeholder="Username" /></div>
           <div className="passwordField field"><input data-content="Password must be alphanumeric" type="password" ref="password" placeholder="Password" /></div>
           <div className="passwordConfirmField field"><input data-content="Passwords must match" type="password" ref="passwordConfirm" placeholder="Confirm Password" /></div>
@@ -187,20 +208,15 @@ SignIn = React.createClass({
   openInfoModal() {
     $("#info-modal")
       .modal({
-        onApprove() {
-          console.log("log in as guest");
-          Meteor.loginWithPassword("Guest", "password", (error) => {
-              if (error !== undefined) {console.log("loginWithPassword:", error)}
-              else {
-                //Load and update database, then log in
-                // console.log("fetching from influences", this.data.influences);
-                // this.fetchFromSoundcloud(this.data.influences);
-                // this.history.pushState(null, "/app");
-              };
-          });
+        onApprove(){
+          $("#reflection-modal").modal("show");
         }
       })
       .modal("show");
+  },
+  openReflectionModal(){
+    console.log('rm');
+    
   },
   render() {
     return (
@@ -220,8 +236,9 @@ SignIn = React.createClass({
         </div>
         <div className="one column row">
           <div className="center aligned column">
-            <div className="ui huge orange basic inverted circular icon button" onClick={this.openInfoModal}><i className="orange inverted big info icon"></i></div>
-            <InfoModal />
+            <div className="ui huge orange circular icon button" onClick={this.openInfoModal}><i className="inverted big info icon"></i></div>
+            <InfoModal openRM={this.openReflectionModal}/>
+            <ReflectionModal />
           </div>
         </div>
     	</div>
