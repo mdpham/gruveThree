@@ -62,7 +62,12 @@ UserFavorites = React.createClass({
 				return <TrackCard key={fav.id} scData={fav} streamType={streamType}/>
 			});	
 		} else {
-			return <NotFound />
+			return (
+				<div className="ui basic segment">
+				  <div className="ui active inverted dimmer">
+				  	<div className="ui text loader">Loading</div>
+					</div>
+				</div>)
 		};
 	},
 
